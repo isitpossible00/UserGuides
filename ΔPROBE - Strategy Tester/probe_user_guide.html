@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ΔPROBE — Strategy Tester Engine · User Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080c10; --bg2:#0e1520; --bg3:#141f2e; --bg4:#1a2840;
+  --border:#1c2e42; --border2:#243650;
+  --accent:#8b5cf6; --accent2:#fbbf24; --accent3:#22d3ee;
+  --amber:#f59e0b; --red:#ef4444; --green:#22c55e; --purple:#a78bfa;
+  --text:#dde8f5; --muted:#4a6a88; --label:#7a9ab8;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Syne',sans-serif;
+  --body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.75;overflow-x:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(139,92,246,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* ── NAV ── */
+nav{position:fixed;left:0;top:0;bottom:0;width:248px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;overflow-y:auto;z-index:100;isolation:isolate}
+.nav-logo{padding:0 22px 24px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.nav-logo-tag{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px}
+.nav-logo-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.nav-logo-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.nav-section-label{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:14px 22px 5px}
+nav a{display:block;padding:8px 22px;color:var(--label);text-decoration:none;font-size:14px;transition:all .15s;border-left:2px solid transparent;line-height:1.4}
+nav a:hover{color:var(--accent);border-left-color:var(--accent);background:rgba(139,92,246,.04)}
+nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(139,92,246,.07)}
+nav a .nav-num{font-family:var(--mono);font-size:13px;color:var(--muted);display:block;margin-bottom:1px}
+
+/* ── MAIN ── */
+main{margin-left:248px;padding:0 64px 100px;max-width:1120px;position:relative;z-index:1}
+
+/* ── HERO ── */
+.hero{padding:76px 0 60px;border-bottom:1px solid var(--border);margin-bottom:68px}
+.hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--accent),transparent);opacity:.3}
+.hero h1{font-family:var(--sans);font-size:56px;font-weight:800;line-height:1.0;color:var(--text);margin-bottom:22px;letter-spacing:-.02em}
+.hero h1 .delta{color:var(--accent)}
+.hero h1 .sub{display:block;font-size:20px;font-weight:400;color:var(--label);margin-top:10px;letter-spacing:0}
+.hero-desc{font-size:17px;color:var(--label);max-width:640px;line-height:1.7;font-weight:300;margin-bottom:30px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:13px;padding:5px 13px;border-radius:4px;letter-spacing:.04em}
+.badge-cyan{background:rgba(139,92,246,.1);color:var(--accent);border:1px solid rgba(139,92,246,.22)}
+.badge-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+.badge-amber{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.badge-orange{background:rgba(34,211,238,.1);color:var(--accent3);border:1px solid rgba(34,211,238,.22)}
+
+/* ── SECTIONS ── */
+section{margin-bottom:80px;scroll-margin-top:28px}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--accent);opacity:.7;min-width:30px}
+h2{font-family:var(--sans);font-size:28px;font-weight:700;color:var(--text)}
+h3{font-family:var(--sans);font-size:18px;font-weight:600;color:var(--accent2);margin:28px 0 12px;letter-spacing:.01em}
+h4{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--text);margin:18px 0 8px}
+p{color:var(--label);margin-bottom:14px;line-height:1.8;max-width:760px}
+p.lede{font-size:17.5px;max-width:720px}
+ul,ol{margin:0 0 16px 22px;max-width:740px;color:var(--label)}
+li{margin-bottom:7px;line-height:1.7}
+strong{color:var(--text);font-weight:500}
+
+/* ── TABLES ── */
+.ref-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;max-width:900px}
+.ref-table th{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--border)}
+.ref-table td{padding:12px 16px;border-bottom:1px solid rgba(28,46,66,.5);color:var(--label);vertical-align:top;line-height:1.65}
+.ref-table tr:hover td{background:rgba(139,92,246,.025)}
+.ref-table td:first-child{font-family:var(--mono);font-size:13px;color:var(--accent2);white-space:nowrap}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:6px;padding:16px 20px;margin:20px 0;border-left:3px solid;display:flex;gap:14px;align-items:flex-start;max-width:760px}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1}
+.callout-title{font-family:var(--sans);font-size:15px;font-weight:600;margin-bottom:5px}
+.callout p{font-size:14.5px;margin:0;line-height:1.68}
+.callout-cyan{background:rgba(139,92,246,.06);border-color:var(--accent)}
+.callout-cyan .callout-title{color:var(--accent)}
+.callout-green{background:rgba(34,197,94,.06);border-color:var(--green)}
+.callout-green .callout-title{color:var(--green)}
+.callout-amber{background:rgba(245,158,11,.07);border-color:var(--amber)}
+.callout-amber .callout-title{color:var(--amber)}
+.callout-red{background:rgba(239,68,68,.06);border-color:var(--red)}
+.callout-red .callout-title{color:var(--red)}
+.callout-purple{background:rgba(167,139,250,.06);border-color:var(--purple)}
+.callout-purple .callout-title{color:var(--purple)}
+
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);color:var(--accent2);padding:2px 8px;border-radius:3px;border:1px solid var(--border)}
+
+/* ── INPUT GROUPS (Settings Reference) ── */
+.input-group{background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin:18px 0;overflow:hidden;max-width:900px}
+.input-group-header{background:var(--bg3);padding:10px 18px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.input-row{display:grid;grid-template-columns:220px 110px 1fr;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(28,46,66,.35);align-items:start}
+.input-row:last-child{border-bottom:none}
+.input-name{font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.5}
+.input-default{font-family:var(--mono);font-size:12px;color:var(--amber);padding:2px 8px;background:rgba(245,158,11,.08);border-radius:3px;border:1px solid rgba(245,158,11,.18);white-space:nowrap;display:inline-block}
+.input-desc{font-size:14px;color:var(--label);line-height:1.68}
+
+/* ── SCREENSHOT PLACEHOLDER ── */
+.ss-placeholder{background:var(--bg2);border:2px dashed var(--border2);border-radius:8px;padding:40px 30px;text-align:center;margin:24px 0;position:relative;max-width:800px}
+.ss-placeholder-label{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.ss-placeholder-title{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ss-placeholder-desc{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:480px;margin:0 auto 12px}
+.ss-placeholder-dim{font-family:var(--mono);font-size:12px;color:var(--border2);margin-top:10px}
+
+/* ── LIGHTBOX (ready for when screenshots are added) ── */
+.lb-overlay{display:none;position:fixed;top:0;left:248px;right:0;bottom:0;background:rgba(0,0,0,.93);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lb-overlay.open{display:flex}
+.lb-img-wrap{position:relative;width:100%;height:100%;box-sizing:border-box;overflow:auto;cursor:zoom-in}
+.lb-img-wrap.zoomed{cursor:grab}
+.lb-img-wrap.zoomed.grabbing{cursor:grabbing}
+.lb-overlay img{display:block;border-radius:6px;box-shadow:0 24px 80px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08);cursor:inherit;user-select:none}
+.lb-close{position:absolute;top:14px;right:18px;width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--label);transition:all .15s;z-index:100000;line-height:1}
+.lb-close:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-caption{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.4);letter-spacing:.08em;pointer-events:none;z-index:100000}
+.lb-esc{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.28);letter-spacing:.1em;pointer-events:none;z-index:100000}
+.lb-zoom-controls{position:absolute;top:14px;left:18px;display:flex;gap:6px;z-index:100000}
+.lb-zoom-btn{width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:16px;color:var(--label);transition:all .15s;user-select:none}
+.lb-zoom-btn:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-zoom-pct{min-width:52px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;color:var(--label);padding:0 8px}
+.zoomable{cursor:zoom-in;transition:opacity .15s;display:block;max-width:100%;height:auto}
+.zoomable:hover{opacity:.88}
+.zoomable-wrap{position:relative;margin:24px 0;max-width:800px;display:inline-block}
+.zoomable-wrap::after{content:'🔍 Click to zoom';position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.6);padding:5px 11px;border-radius:4px;pointer-events:none;letter-spacing:.06em;transition:opacity .2s}
+
+/* ── FADE IN ── */
+.fade-in{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;font-size:12.5px;color:var(--muted);margin-top:60px;text-align:center;line-height:1.7;max-width:900px}
+
+/* ── DIAGONAL WATERMARK (tiled across every section) ── */
+.watermark-overlay{position:fixed;inset:0;z-index:40;pointer-events:none;background-repeat:repeat}
+
+/* ── IN-SECTION JUMP MENU ── */
+.jumpmenu{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;max-width:900px}
+.jumpmenu-label{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;width:100%;margin-bottom:2px}
+.jump-link{font-family:var(--mono);font-size:13px;color:var(--label);text-decoration:none;padding:6px 12px;border:1px solid var(--border2);border-radius:4px;background:var(--bg3);transition:all .15s}
+.jump-link:hover{color:var(--accent);border-color:var(--accent);background:rgba(139,92,246,.08)}
+
+/* ── PENDING SECTION ── */
+nav a.nav-pending{opacity:.5}
+nav a.nav-pending .nav-num::after{content:' ○';color:var(--amber)}
+.pending-box{background:var(--bg2);border:1.5px dashed var(--border2);border-radius:6px;padding:20px 22px;max-width:760px;margin:10px 0 24px}
+.pending-tag{font-family:var(--mono);font-size:11.5px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.pending-box p{color:var(--label);font-size:14.5px;margin-bottom:8px}
+.pending-box ul{margin:6px 0 0 18px}
+.pending-box li{font-size:14px;color:var(--label)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-tag">User Guide</div>
+    <div class="nav-logo-title">ΔPROBE — Strategy<br>Tester Engine</div>
+    <div class="nav-logo-sub">Reference Guide</div>
+  </div>
+
+  <div class="nav-section-label">Foundation</div>
+  <a href="#s1"><span class="nav-num">01</span>What is ΔPROBE?</a>
+  <a href="#s2"><span class="nav-num">02</span>Indicator Engine</a>
+  <a href="#s3"><span class="nav-num">03</span>Trade Basis</a>
+  <a href="#s4"><span class="nav-num">04</span>Entry &amp; Exit Signals</a>
+  <a href="#s5"><span class="nav-num">05</span>Risk Management</a>
+  <a href="#s6"><span class="nav-num">06</span>Regime Filter</a>
+  <a href="#s7"><span class="nav-num">07</span>Capital Management</a>
+
+  <div class="nav-section-label">Reference</div>
+  <a href="#s8"><span class="nav-num">08</span>Dashboard Tour</a>
+  <a href="#s9"><span class="nav-num">09</span>Settings Reference</a>
+
+  <div class="nav-section-label">Practical Guide</div>
+  <a href="#s10"><span class="nav-num">10</span>Tuning Workflow</a>
+  <a href="#s11"><span class="nav-num">11</span>Trade Basis Recipes</a>
+
+  <div class="nav-section-label">Support</div>
+  <a href="#s12"><span class="nav-num">12</span>FAQ &amp; Troubleshooting</a>
+</nav>
+
+<div class="watermark-overlay" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjAiIGhlaWdodD0iMzAwIj4KPGRlZnM+CjxwYXR0ZXJuIGlkPSJ3bSIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjU2MCIgaGVpZ2h0PSIzMDAiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgtMjUpIj4KPHRleHQgeD0iMTUiIHk9IjU1IiBmb250LWZhbWlseT0iU3BhY2UgR3JvdGVzaywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2E3OGJmYSIgZmlsbC1vcGFjaXR5PSIwLjA5Ij7OlFBST0JFPC90ZXh0Pgo8dGV4dCB4PSIxNSIgeT0iODIiIGZvbnQtZmFtaWx5PSJJQk0gUGxleCBNb25vLCBtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTMiIGxldHRlci1zcGFjaW5nPSIxIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDc1Ij5QRVJTT05BTCBVU0UgT05MWSDCtyBETyBOT1QgUkVESVNUUklCVVRFPC90ZXh0Pgo8dGV4dCB4PSIyOTUiIHk9IjIwNSIgZm9udC1mYW1pbHk9IlNwYWNlIEdyb3Rlc2ssIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4wOSI+zpRQUk9CRTwvdGV4dD4KPHRleHQgeD0iMjk1IiB5PSIyMzIiIGZvbnQtZmFtaWx5PSJJQk0gUGxleCBNb25vLCBtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTMiIGxldHRlci1zcGFjaW5nPSIxIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDc1Ij5QRVJTT05BTCBVU0UgT05MWSDCtyBETyBOT1QgUkVESVNUUklCVVRFPC90ZXh0Pgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCN3bSkiLz4KPC9zdmc+')"></div>
+
+<main>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Strategy Tester Engine</div>
+    <h1><span class="delta">Δ</span>PROBE<span class="sub">Performance · Risk · Optimization · Backtesting · Engine</span></h1>
+    <p class="hero-desc">A multi-indicator backtesting engine for TradingView. Choose an oscillator or moving average, configure entry/exit logic, layer in regime filtering and risk management, and read the results through a built-in diagnostic dashboard that recalculates live as you change settings.</p>
+    <div class="hero-badges">
+      <span class="badge badge-cyan">Pine Script v6</span>
+      <span class="badge badge-green">Long / Short</span>
+      <span class="badge badge-amber">11 Indicator Modes</span>
+      <span class="badge badge-orange">Walk-Forward Validation</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 01 — WHAT IS ΔPROBE? -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s1" class="fade-in">
+    <div class="section-header"><span class="section-num">01</span><h2>What is ΔPROBE?</h2></div>
+
+    <p class="lede">ΔPROBE is a strategy tester — a self-contained backtesting engine you drop on a chart to evaluate a rules-based long/short trading approach against historical price data, then tune it using a dashboard built specifically for that purpose.</p>
+    <p>It's not a signal service and it doesn't tell you what to trade. It's a parameterized framework: you choose an indicator, choose how that indicator should trigger entries and exits, choose how positions are sized and protected, and ΔPROBE simulates every trade that configuration would have taken historically — then breaks the result down across performance, risk, and validity so you can see <em>why</em> it performed the way it did, not just the final number.</p>
+
+    <div class="callout callout-cyan">
+      <div class="callout-icon">Δ</div>
+      <div class="callout-body">
+        <div class="callout-title">What the name stands for</div>
+        <p><strong>P</strong>erformance · <strong>R</strong>isk · <strong>O</strong>ptimization · <strong>B</strong>acktesting · <strong>E</strong>ngine — the five things the dashboard is built to surface: what happened, how risky it was, where the realistic tuning opportunity sits, whether the result holds up on unseen data, and a live engine that recalculates all of it on every parameter change.</p>
+      </div>
+    </div>
+
+    <p>Everything in this guide describes what the engine does and how to read it. None of it is a recommendation to trade any particular way.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Requires a standard chart type</div>
+        <p>ΔPROBE only works on standard chart types — line, bar, or candlestick. Heikin Ashi, Renko, Kagi, Point &amp; Figure, Line Break, and Range charts substitute synthetic, calculated prices that were never actually traded, so the strategy detects this automatically and blocks all trading rather than produce unreliable results. See §12 for what you'll see if this happens.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 02 — INDICATOR ENGINE -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s2" class="fade-in">
+    <div class="section-header"><span class="section-num">02</span><h2>Indicator Engine</h2></div>
+
+    <p class="lede">One dropdown — <strong>Primary Indicator</strong> — controls every entry and exit signal in the strategy. Switching it re-routes the entire decision layer to a different oscillator or moving average; nothing else in the script needs to change.</p>
+    <p>In plain English: the indicator is the strategy's decision-maker. It watches price and produces a single reading each bar — how strong or weak momentum is, or how stretched price is from its average — and the strategy buys, sells, or holds based on where that reading sits relative to a signal line or a threshold you set.</p>
+
+    <table class="ref-table" style="max-width:1040px">
+      <tr><th>Indicator</th><th>What it measures</th><th>Use it for</th><th>Typical OB/Mid/OS</th><th>Lengths (1/2/Signal)</th></tr>
+      <tr><td>TSI</td><td>True Strength Index — double-smoothed price momentum, less choppy than raw RSI.</td><td>Catching sustained trend moves while filtering out short-term chop.</td><td>42 / 0 / -42</td><td>5 / 2 / 2</td></tr>
+      <tr><td>Stochastic</td><td>Standard %K/%D — where price sits within its recent range.</td><td>Spotting overbought/oversold turns in a range-bound or moderately trending market.</td><td>80 / 50 / 20</td><td>5 / 3 / 2</td></tr>
+      <tr><td>MACD</td><td>Convergence/divergence between a fast and slow EMA — trend momentum.</td><td>Catching the start of a new trend via moving-average crossovers.</td><td>set to a relevant +/- histogram value</td><td>12 / 26 / 9</td></tr>
+      <tr><td>CCI</td><td>Commodity Channel Index — deviation from a statistical mean; mean-reversion oriented.</td><td>Catching mean-reversion setups when price stretches unusually far from its average.</td><td>100 / 0 / -100</td><td>20 / — / 3</td></tr>
+      <tr><td>MFI</td><td>Money Flow Index — RSI weighted by volume.</td><td>Same job as RSI, but only counts moves backed by real volume — filters out low-conviction drifts.</td><td>80 / 50 / 20</td><td>14 / — / 3</td></tr>
+      <tr><td>RSI</td><td>Relative Strength Index — the classic momentum oscillator.</td><td>A simple, widely-understood momentum gauge that works reasonably well across most markets.</td><td>70 / 50 / 30</td><td>14 / — / 3</td></tr>
+      <tr><td>Williams %R</td><td>Close vs. the high/low range, scaled 0 to -100 (negative scale — set levels accordingly).</td><td>Same job as Stochastic, just faster-reacting and on a negative scale.</td><td>-20 / -50 / -80</td><td>14 / — / 3</td></tr>
+      <tr><td>SMA</td><td>Simple moving average of price, with an EMA-smoothed signal line. Price-scale, not bounded.</td><td>A smooth, slower-reacting trend read — fewer false signals, later entries/exits.</td><td>n/a — ignored</td><td>20 / — / —</td></tr>
+      <tr><td>EMA</td><td>Exponential moving average of price, with an EMA-smoothed signal line. Price-scale, not bounded.</td><td>A faster-reacting trend read than SMA — earlier signals, more whipsaw.</td><td>n/a — ignored</td><td>20 / — / —</td></tr>
+      <tr><td>Entry SMA</td><td>Simple moving average of price, no signal line. Entry is price vs. the MA directly (State or Cross — see §4).</td><td>The simplest possible trend-following rule: be in the market only while price is on the right side of one moving average.</td><td>n/a</td><td>20 / — / —</td></tr>
+      <tr><td>Entry EMA</td><td>Exponential moving average of price, no signal line. Same State/Cross behaviour as Entry SMA.</td><td>Same rule as Entry SMA, just faster to react to price moving across the line.</td><td>n/a</td><td>20 / — / —</td></tr>
+    </table>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">Reading the table</div>
+        <p>Length 1 and Length 2 map to different things per indicator — for TSI they're the long/short EMA passes of the double-smooth; for MACD they're the fast/slow EMA; for CCI, MFI, RSI and Williams %R only Length 1 (the lookback) is used, and Signal is an EMA smoothing applied on top of the raw line. Hover the Length 1/2/Signal inputs in the script itself for the exact per-indicator mapping.</p>
+      </div>
+    </div>
+
+    <h3>SMA / EMA vs. Entry SMA / Entry EMA — what's the difference?</h3>
+    <p><strong>SMA</strong> and <strong>EMA</strong> behave like the oscillators above: the moving average is the "Primary Value" and a second, EMA-smoothed line is the "Signal" — so you use the same Entry Signal dropdown (Above Signal Line, Cross above Signal, etc.) as you would for RSI or Stochastic.</p>
+    <p><strong>Entry SMA</strong> and <strong>Entry EMA</strong> are simpler: there's no signal line at all. Entry is decided purely by price vs. the moving average, using a separate <strong>Entry SMA/EMA Trigger Mode</strong> dropdown (State or Cross — see §4). The main Entry Signal dropdown is ignored entirely in these two modes, and the exit is always a cross of price back through the MA regardless of what's chosen for Indicator Exit.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Note</div>
+        <p>Overbought / Midpoint / Oversold levels have no effect in SMA, EMA, Entry SMA, or Entry EMA modes — these are price-scale, not bounded oscillators, so those three levels are ignored for entry/exit logic when one of these four is selected.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 03 — TRADE BASIS -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s3" class="fade-in">
+    <div class="section-header"><span class="section-num">03</span><h2>Trade Basis — Alternate Ticker</h2></div>
+
+    <p class="lede">By default, ΔPROBE calculates its indicator and executes trades on the chart's own symbol. <strong>Use Alternate Ticker for Signals</strong> splits that apart: the indicator can watch one symbol while the strategy actually trades another.</p>
+    <p>This matters because not every symbol you want to trade has clean, low-noise price action to generate signals from. Three common uses:</p>
+
+    <h4>1. Signal on the underlying, trade the leveraged product</h4>
+    <p>Chart <code>TQQQ</code>, set Alternate Ticker to <code>QQQ</code>. TQQQ is a 3x leveraged product — its own price action is noisier and more prone to decay-driven whipsaw than the underlying it tracks. Running the oscillator off QQQ's cleaner price action, while still entering and exiting TQQQ, can produce a steadier signal than calculating directly from the leveraged instrument.</p>
+
+    <h4>2. Signal via an inverse relationship, trade the inverse product</h4>
+    <p>Chart <code>SQQQ</code> (the inverse of QQQ), set Alternate Ticker to <code>1/QQQ</code>. Pine's <code>request.security</code> can evaluate a ratio expression like this directly, so the indicator effectively reads QQQ's price action inverted — meaning a "bullish" signal on <code>1/QQQ</code> corresponds to QQQ falling, which is when you'd want to be long SQQQ.</p>
+
+    <h4>3. Correlated ticker pairs</h4>
+    <p>Some instruments move in a fairly stable relationship with another (e.g. a miner and the metal it mines, or a sector ETF and its bellwether stock). If one side of that pair gives cleaner technical signals than the other, Trade Basis lets you calculate off the cleaner one while trading the one you actually want exposure to.</p>
+
+    <div class="callout callout-green">
+      <div class="callout-icon">✓</div>
+      <div class="callout-body">
+        <div class="callout-title">What stays the same</div>
+        <p>Position sizing, stop loss, trailing stop, chandelier exit, and the Regime MA all still reference the <em>chart's own</em> close price — only the indicator's value/signal calculation is redirected to the Alternate Ticker. Risk management always reflects what you're actually holding.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 04 — ENTRY & EXIT SIGNAL LOGIC -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s4" class="fade-in">
+    <div class="section-header"><span class="section-num">04</span><h2>Entry &amp; Exit Signal Logic</h2></div>
+
+    <p class="lede">Every entry and exit condition is either <strong>state-based</strong> (true for as long as the condition holds — can re-fire on the very next bar after an exit) or <strong>event-based</strong> (true only on the single bar the condition first occurs).</p>
+
+    <h3>Long Entry Signal</h3>
+    <table class="ref-table">
+      <tr><th>Option</th><th>Type</th><th>Behaviour</th></tr>
+      <tr><td>Above Signal Line</td><td>State</td><td>Indicator &gt; signal line. Default. Re-enters immediately after an exit if still bullish.</td></tr>
+      <tr><td>Cross above Signal</td><td>Event</td><td>Indicator crosses up through signal line. Avoids immediate re-entry while indicator stays elevated.</td></tr>
+      <tr><td>Above Midline</td><td>State</td><td>Indicator &gt; midline. Stricter — requires unambiguously positive momentum.</td></tr>
+      <tr><td>Cross above Midline</td><td>Event</td><td>Event-based equivalent of Above Midline.</td></tr>
+      <tr><td>Above Oversold</td><td>State</td><td>Wide entry zone — catches moves early but accepts more noise.</td></tr>
+      <tr><td>Cross above Oversold</td><td>Event</td><td>Catches recoveries from deeply oversold readings — less frequent, typically higher quality.</td></tr>
+    </table>
+    <p>Short Entry Signal mirrors this exactly on the downside (Below Signal Line, Cross below Signal, Below Midline, Cross below Midline, Below Overbought, Cross below Overbought).</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Ignored in Entry SMA / Entry EMA mode</div>
+        <p>Both Entry Signal dropdowns are ignored when Primary Indicator is Entry SMA or Entry EMA — those modes use the separate <strong>Entry SMA/EMA Trigger Mode</strong> dropdown instead: <strong>State</strong> (long while close &gt; MA, short while close &lt; MA — recommended when Regime Filter or No Short Zone are on, since those are multi-bar sustained-state filters that line up better with a state-based entry) or <strong>Cross</strong> (event-based, fires only on the bar price crosses the MA — a cleaner single signal, but easy to starve if paired with those same multi-bar filters).</p>
+      </div>
+    </div>
+
+    <h3>Indicator Exit</h3>
+    <p>Independent from the entry signal — Long Indicator Exit and Short Indicator Exit each choose which level, crossed in the adverse direction, closes the position: <strong>Off</strong>, Signal Line (earliest), Oversold/Overbought (latest, strongest confirmation), or Midline (balanced). Earlier exits are more responsive but generate more false exits; later exits give more room but can give back open profit.</p>
+    <p>In Entry SMA / Entry EMA mode, any Indicator Exit choice other than Off collapses to one rule: exit when price crosses back through the MA — since these modes have no signal line, oversold, midline, or overbought level to choose between. This applies even if the entry trigger mode is State.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 05 — RISK MANAGEMENT -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s5" class="fade-in">
+    <div class="section-header"><span class="section-num">05</span><h2>Risk Management</h2></div>
+
+    <p class="lede">Four independent mechanisms can close a position, each doing a different job. They can be combined — whichever fires first, fires.</p>
+
+    <h3>Stop Loss</h3>
+    <p>Always active, and it's the only exit that's regime-aware by design: a <strong>wider</strong> stop applies when the entry happens above the Regime MA (trend is confirmed — allow more room), and a <strong>tighter</strong> stop applies below it (trend unconfirmed — cut losses faster). Defaults: 4.0% above MA, 2.0% below MA for longs.</p>
+
+    <h3>Trailing Stop — Fixed or Progressive</h3>
+    <p><strong>Fixed</strong> applies one trail % from entry to exit, measured off the highest close since entry. Simple and consistent.</p>
+    <p><strong>Progressive</strong> is a four-tier system that automatically widens the trail as open profit grows — tight on trades that stall early, wide on the outlier trades that typically drive most of total PnL:</p>
+    <table class="ref-table">
+      <tr><th>Tier</th><th>Unlocks at open profit ≥</th><th>Trail %</th></tr>
+      <tr><td>1</td><td>0%</td><td>10%</td></tr>
+      <tr><td>2</td><td>15%</td><td>13%</td></tr>
+      <tr><td>3</td><td>35%</td><td>15%</td></tr>
+      <tr><td>4 (outlier)</td><td>40%</td><td>15%</td></tr>
+    </table>
+    <p>The tier ratchets up only — it never steps back down if open profit dips temporarily. Tier resolution uses the bar's <em>high</em> (matching how MFE is measured) so a trade that spikes 28% intrabar correctly unlocks Tier 2 even if that day's close only shows 12%; the stop level itself still trails off the highest <em>close</em>, avoiding intrabar whipsaw.</p>
+
+    <h3>Chandelier Exit</h3>
+    <p>A volatility-adjusted trail: <code>stop = peakClose − (ATR × multiplier)</code>. Widens automatically in high-volatility conditions rather than using a fixed percentage — runs in parallel with the Trailing Stop when both are enabled, and whichever produces the more protective (higher) stop is the effective exit level. Default: 22-period ATR × 2.9 for longs.</p>
+
+    <h3>No Short Zone</h3>
+    <p>Two optional filters that block short entries even when the indicator signal is valid — designed to prevent shorting a brief, noise-driven dip below the Regime MA that recovers immediately:</p>
+    <ul>
+      <li><strong>Spatial filter</strong> — requires close to sit meaningfully below the MA, not just a single tick under it: <code>close &lt; (Regime MA − ATR × multiplier)</code>. Default multiplier 0.5.</li>
+      <li><strong>Temporal filter</strong> — requires that spatial condition to hold for N consecutive days before a short is allowed (default 2), filtering out 1-day false breakdowns.</li>
+    </ul>
+
+    <h3>Short Margin Safety</h3>
+    <p>With <code>margin_short = 100%</code>, a fully-deployed short triggers a margin call the moment price moves against you, because required margin grows with position value while equity is simultaneously falling. Short position size is automatically reduced so the margin-call threshold sits beyond your stop loss plus a safety buffer (default 5%) — gap events remain unpreventable in any backtester, but this formula covers normal adverse moves.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 06 — REGIME FILTER -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s6" class="fade-in">
+    <div class="section-header"><span class="section-num">06</span><h2>Regime Filter</h2></div>
+
+    <p class="lede">One moving average (type and length both configurable — SMA/EMA/WMA, default SMA-200) used as a trend filter: <strong>Regime Filter — Longs</strong> only allows long entries while price is above it; <strong>Regime Filter — Shorts</strong> only allows short entries while price is below it. Both are independent toggles — enable either, both, or neither.</p>
+    <p>This same MA also sets the Stop Loss tier (above/below MA) and feeds the No Short Zone spatial filter, so turning it off doesn't remove those — it only removes the entry gating.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 07 — CAPITAL MANAGEMENT -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s7" class="fade-in">
+    <div class="section-header"><span class="section-num">07</span><h2>Capital Management</h2></div>
+
+    <p class="lede">Two settings model a real trader's year-to-year behaviour rather than an unbroken compounding curve — worth understanding together, since most backtests default to a mode that quietly overstates real-world results.</p>
+
+    <h3>Close Trades Before Year End</h3>
+    <p>Force-closes any open position a configurable number of trading days before Dec 31 (default 4, ≈ Dec 27) — the purpose is tax-related: it settles the position within the calendar year rather than letting it roll into January, which matters for tax-loss/gain harvesting timing (T+1 settlement).</p>
+
+    <h3>Reset to Initial Capital Each Year</h3>
+    <p><strong>ON</strong> — each year risks only the original initial capital again; profits made are treated as banked/withdrawn rather than reinvested. This models a trader who actually takes gains off the table each year, and it's the more conservative, arguably more realistic setting for judging whether a strategy holds up — full compounding tends to make early-years' edge look larger than it would feel with real capital at risk.</p>
+    <p><strong>OFF</strong> (default) — full equity compounds forward year over year, the standard backtest assumption.</p>
+
+    <h3>Require Fresh Signal After Year-End Close</h3>
+    <p>Only relevant when Close Trades Before Year End is on. After that forced close, should the strategy immediately re-enter in January if conditions still technically hold (<strong>OFF</strong> — the trade essentially just continues under a new position), or wait for a genuinely new signal — the indicator dipping and then crossing back up — before re-entering (<strong>ON</strong>)? ON prevents what would otherwise look like one continuous trade being artificially split into two at the year boundary purely for tax accounting.</p>
+
+    <div class="callout callout-cyan">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">How these three work together</div>
+        <p>Turn all three on together to simulate a trader who banks profits annually, closes out ahead of year-end for tax purposes, and only re-enters on a genuinely fresh signal in the new year — the most conservative, real-world-behaviour combination the engine can model. Turn them all off to see the strategy's raw, fully compounding technical performance with no tax-driven interruptions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 08 — DASHBOARD TOUR -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s8" class="fade-in">
+    <div class="section-header"><span class="section-num">08</span><h2>Dashboard Tour</h2></div>
+
+    <p class="lede">Seven panels, each answering a different question. All are independently toggleable and positionable.</p>
+
+    <img src="images/full_dashboard.png" alt="ΔPROBE full dashboard — all panels displayed together on a TQQQ chart, Stochastic (13,5,3) strategy">
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:-10px">Every panel displayed together — TQQQ, Stochastic (13,5,3), 2019–2026</p>
+
+    <h3>Oscillator Overlay &amp; Signal Tooltips</h3>
+    <p>With <strong>Show Indicator (Oscillator Overlay)</strong> on, the selected indicator plots in its own pane below the chart, alongside every buy/sell marker: a green triangle for a long entry, a red triangle for any exit (stop loss, trailing stop, chandelier, or indicator exit). Hovering any marker opens a full tooltip — reason, exit price, entry price, quantity, bars held, and $ / % gain-or-loss — so you can inspect any individual trade without leaving the chart.</p>
+    <p>This is independent of <strong>Show Chart Markers</strong>, which draws the same information price-anchored directly on the candles instead of in the oscillator pane — turn on either, both, or neither.</p>
+    <img src="images/oscillator_overlay.png" alt="ΔPROBE oscillator pane with buy/sell markers and a Long Exit tooltip showing Reason, Exit Price, Entry Price, Qty, Bars Held, and Gain/Loss">
+
+    <h3>Yearly PnL Table</h3>
+    <p>Year-by-year realized PnL in $ and %, trade counts (Long/Short/Total), and a summary row block: total PnL, % Profitable, Max Drawdown, Avg Bars/Trade, CAGR, and — if enabled — Extended Metrics (Profit Factor, Annual W/L, Avg Win, Avg Loss, Avg MAE%, Avg MFE%), a Buy &amp; Hold comparison, and a Rolling Performance section (last 4 completed years side-by-side plus a rolling window, flagging whether recent performance is degrading vs. history).</p>
+    <img src="images/pnl_table_full.png" alt="ΔPROBE Yearly PnL Table — full summary with Extended Metrics, Buy & Hold, and Rolling Performance">
+
+    <h3>Active Trade Table</h3>
+    <p>Only shows content while a position is open: entry price, stop level, dollar and % risk, current trail/chandelier levels, open P&amp;L, MFE/MAE so far, bars held, and win/loss streak. Updates every bar.</p>
+    <img src="images/active_trade_table.png" alt="ΔPROBE Active Trade Table — long position open showing entry, stop, trail, and open P&L">
+
+    <h3>Trade Distribution Histogram</h3>
+    <p>Buckets every closed trade's return % (bucket width configurable) and shows count + cumulative PnL per bucket, plus an Exit Reason breakdown (Stop Loss / Trailing Stop / Chandelier / Indicator Exit / Year-End / Other) with a plain-English recommendation on which exit type is dominating. This is the single best panel for seeing <em>where</em> your wins and losses actually cluster, rather than just an average.</p>
+    <img src="images/trade_histogram.png" alt="ΔPROBE Trade Distribution Histogram with Exit Reasons breakdown">
+
+    <h3>Strategy Assessment — Flags &amp; Optimisation Priority</h3>
+    <p>Ten plain-English health checks, colour-coded green/amber/red: direction enablement, top-trade concentration risk, long/short direction split, below/above-MA drag, loss scaling over time, volatility regime split (does performance depend on low/high-vol conditions), structure/profit-factor health, MFE capture (overall and per exit type — directly diagnoses whether CE or Trail is exiting too early), max consecutive losses, and a shorts-only-on-a-leveraged-instrument warning where relevant.</p>
+    <p>The same box continues straight into <strong>Optimisation Priority</strong>, ranking Stop Loss, Chandelier Exit, and Trailing Stop by realistic $ opportunity (not theoretical maximum), each against a fixed ceiling — CE 80%, Trail 45%, SL reduction 30% — so the tool can't claim "fix this for 100% more profit." Each lever also carries a confidence tag: Stop Loss is always HIGH confidence (regime filtering is a direct, known lever); CE/Trail widening is LOW confidence (a real trade-off against holding through genuine reversals, not a free improvement). Walk-Forward Validation (20+ trades) and Optimisation Priority (10+ trades) both require minimum trade counts before they display.</p>
+    <img src="images/assessment_full.png" alt="ΔPROBE Strategy Assessment box — Flags section followed by Optimisation Priority ranking">
+
+    <h3>Strategy Description Box</h3>
+    <p>A compact settings summary — directions enabled, indicator + entry/exit signal choice, stop loss/trail/chandelier configuration, active filters, and display toggles — all in one glance. Useful as a record of exactly what configuration produced a given backtest, without having to reopen the input panel.</p>
+    <img src="images/strategy_description.png" alt="ΔPROBE Strategy Description box — active settings summary">
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 09 — SETTINGS REFERENCE -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s9" class="fade-in">
+    <div class="section-header"><span class="section-num">09</span><h2>Settings Reference</h2></div>
+
+    <p class="lede">Grouped exactly as they appear in the script's input panel.</p>
+
+    <div class="input-group">
+      <div class="input-group-header">🖼️ Chart Display</div>
+      <div class="input-row"><div class="input-name">Show Indicator (Oscillator Overlay)</div><div></div><div class="input-desc">Visual only — no effect on backtest results. <strong>Use it when</strong> you want to see the indicator's actual value and where entry/exit markers landed relative to it — moves the indicator into its own pane above/below the price chart so signal and price can be read side-by-side. Leave it off for a clean price chart if you only care about the dashboard numbers.</div></div>
+      <div class="input-row"><div class="input-name">Show Chart Markers</div><div></div><div class="input-desc">Visual only, independent of the setting above. <strong>Use it when</strong> you want entry/exit detail (reason, price, qty, gain/loss) directly on the candles instead — useful for checking a fill against that day's actual high/low/wick, or when you'd rather keep the oscillator pane closed but still inspect individual trades on hover.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">⚙️ General Settings</div>
+      <div class="input-row"><div class="input-name">Primary Indicator</div><div></div><div class="input-desc">Changes the entire signal engine — see §2. The single highest-impact setting in the script.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📐 Indicator Settings / 📏 Indicator Levels</div>
+      <div class="input-row"><div class="input-name">Length 1 / Length 2 / Signal</div><div></div><div class="input-desc">Per-indicator defaults and mapping in §2. Shorter lengths = more, earlier, noisier signals; longer lengths = fewer, later, higher-conviction signals.</div></div>
+      <div class="input-row"><div class="input-name">Overbought / Midpoint / Oversold</div><div></div><div class="input-desc">Typical values per indicator in §2. Looser levels widen the entry zone; stricter levels narrow it.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📈 Regime MA</div>
+      <div class="input-row"><div class="input-name">MA Type / Length</div><div class="input-default">SMA 200</div><div class="input-desc">Feeds the Stop Loss tier, No Short Zone spatial filter, and both Regime Filter toggles. See §6. <strong>SMA</strong> is the standard smooth, slower-reacting baseline. <strong>EMA</strong> reacts faster to recent price — fewer late regime flips at the cost of more whipsaw in choppy conditions. <strong>WMA</strong> sits between the two. Shorten the Length for a faster-reacting regime read that flips direction more often; lengthen it for a slower, more stable one.</div></div>
+      <div class="input-row"><div class="input-name">Regime Filter — Longs / Shorts</div><div></div><div class="input-desc">Independent entry gates on the MA above/below. See §6.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🟢 Long Settings / 🔴 Short Settings</div>
+      <div class="input-row"><div class="input-name">Stop Loss % (above/below MA)</div><div></div><div class="input-desc">See §5. Regime-aware — wider above the MA, tighter below it.</div></div>
+      <div class="input-row"><div class="input-name">Trailing Stop Mode + tiers</div><div></div><div class="input-desc">Fixed or Progressive (4 tiers). See §5. <strong>Use Fixed</strong> when trade outcomes are fairly evenly sized and you want simple, predictable behaviour. <strong>Use Progressive</strong> when a small number of large outlier trades tend to drive most of the profit (typical of trend-following on volatile instruments) — it stays tight while a trade is unproven, then widens automatically to let a genuine outlier run further.</div></div>
+      <div class="input-row"><div class="input-name">Chandelier Exit ATR period / mult.</div><div></div><div class="input-desc">Volatility-adjusted trail. See §5.</div></div>
+      <div class="input-row"><div class="input-name">Re-entry suppression (long only)</div><div></div><div class="input-desc">Blocks immediate re-entry for N bars after a stop-loss exit specifically, to avoid chasing straight back into the same losing move.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🚫 No Short Zone</div>
+      <div class="input-row"><div class="input-name">Spatial / Temporal filters</div><div></div><div class="input-desc">See §5. Widening the spatial multiplier or lengthening the temporal requirement means fewer, later, more-confirmed shorts.</div></div>
+      <div class="input-row"><div class="input-name">Margin Safety Buffer</div><div class="input-default">5%</div><div class="input-desc">Sizes short positions so the margin-call threshold sits beyond stop loss + buffer. The 5% default is reasonable for moderately volatile instruments — <strong>increase to 10–15%</strong> for higher-volatility tickers (3x leveraged ETFs, small caps, anything prone to large overnight gaps), and especially if you notice a margin-call warning on a specific trade in the backtest — that's the script's own signal that the current buffer wasn't wide enough for this instrument's typical adverse move size.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">╰┈➤🚪 Indicator Entry / 🚨 Indicator Exit Settings</div>
+      <div class="input-row"><div class="input-name">Long/Short Entry Signal</div><div></div><div class="input-desc">State vs. event-based triggers. See §4.</div></div>
+      <div class="input-row"><div class="input-name">Entry SMA/EMA Trigger Mode</div><div></div><div class="input-desc">Only relevant in Entry SMA/EMA modes. See §4.</div></div>
+      <div class="input-row"><div class="input-name">Long/Short Indicator Exit</div><div></div><div class="input-desc">See §4. Earlier exits = more responsive, more false exits; later = more room, more give-back.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🗓️ Strategy Period / 💰 Capital Management</div>
+      <div class="input-row"><div class="input-name">Start/End Date</div><div></div><div class="input-desc">Backtest window bounds.</div></div>
+      <div class="input-row"><div class="input-name">Close Trades Before Year End</div><div></div><div class="input-desc">See §7.</div></div>
+      <div class="input-row"><div class="input-name">Reset to Initial Capital Each Year</div><div></div><div class="input-desc">See §7.</div></div>
+      <div class="input-row"><div class="input-name">Require Fresh Signal After Year-End Close</div><div></div><div class="input-desc">See §7.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📊 Display / 🧠 Assessment / 📉 Trade Distribution</div>
+      <div class="input-row"><div class="input-name">Position, font size, section toggles</div><div></div><div class="input-desc">All visual/reporting only — no effect on the underlying backtest, only on what you can see and where.</div></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 10 — RECOMMENDED TUNING WORKFLOW (PENDING) -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s10" class="fade-in">
+    <div class="section-header"><span class="section-num">10</span><h2>Recommended Tuning Workflow</h2></div>
+
+    <p class="lede">Why this specific order — Entry/Exit → Stop Loss → Chandelier → Trailing Stop, Long-only before Short-only before combined — outperforms tuning parameters in whatever order seems convenient at the time.</p>
+
+    <h3>Why Entry/Exit first</h3>
+    <p>Every downstream metric — the histogram's shape, Profit Factor, drawdown — is a measurement of what the exit mechanisms did <em>to the trades the entry signal produced</em>. If the entry/exit signal itself isn't sound yet, tuning Stop Loss, Chandelier, or Trailing Stop first means tuning risk parameters against noise, not against a real edge — and worse, a wide-enough stop or trail can visually mask a broken entry signal, hiding the problem instead of fixing it. Confirm the signal visually on the chart before touching anything else.</p>
+
+    <h3>Why Stop Loss next</h3>
+    <p>Stop Loss sets the floor — the maximum acceptable loss per trade. It's the foundation the other two exits sit on top of. Tune it before Chandelier or Trailing Stop because if it's too tight, it will fire before either of those mechanisms gets a chance to do its job; if it's too loose, no amount of later tuning on Chandelier or Trailing Stop can compensate for oversized losses baked in at the stop level.</p>
+
+    <h3>Why Chandelier Exit next</h3>
+    <p>With Stop Loss already settled, Chandelier's job becomes purely to protect open profit through normal volatility rather than also functioning as a backstop against a large loss. Tuning it in isolation — after the floor is fixed — makes its effect on the histogram's win-side buckets much easier to attribute cleanly to Chandelier itself, rather than to an interaction with a still-unsettled Stop Loss.</p>
+
+    <h3>Why Trailing Stop last</h3>
+    <p>Trailing Stop (especially Progressive) is the fine-tuning layer — its whole purpose is capturing more of the tail end of a winning move once Stop Loss and Chandelier already define the baseline risk/reward. Tuning all three simultaneously turns this into a three-variable search where it's genuinely hard to tell which change caused which effect; tuning them in sequence keeps each step attributable.</p>
+
+    <h3>Why Long-only, then Short-only, then combined</h3>
+    <p>Long and Short trades typically have very different distribution shapes — every example in §11 shows this, with Shorts usually contributing far fewer trades and different regime sensitivity than Longs. Tuning both directions together from the start means a change to Long-side risk parameters can quietly offset or mask a Short-side problem in the combined metrics, making it unclear which side actually improved. Isolating each direction, confirming it individually against the Histogram, then re-combining and reconciling, keeps the attribution honest.</p>
+
+    <h3>Reading the Histogram while tuning</h3>
+    <p>The signature of an exit mechanism doing its job, rather than being over-fit to the specific history tested, is a visible compression of the loss-side buckets and/or a rightward shift in trade outcomes — without meaningfully hollowing out the win-side tail. If a tuning change makes the histogram narrower on both sides at once, that's a sign of tightening exits generally rather than improving them specifically.</p>
+
+    <h3>Worked Example — SPY, Williams %R</h3>
+
+    <p><strong>1. Baseline — nothing tuned.</strong> Williams %R (21,5), Long and Short both enabled, no Stop Loss, Trailing Stop, or Chandelier Exit active for Longs — the indicator signal is the only thing closing a trade. Over 2019–2026 this produced <strong>317 trades</strong> — wildly excessive — for just $6,595 net (65.95%), a 1.28 Profit Factor and 6.81% CAGR, badly trailing SPY's own buy-and-hold return of 200.42% (15.62% CAGR) over the same window. This is the exact failure mode the method warns about: an unconfirmed, over-sensitive signal generating noise, not edge.</p>
+    <img src="images/example_spy_baseline.png" alt="ΔPROBE SPY Williams %R (21,5) baseline configuration, untuned — 317 trades, Profit Factor 1.28" style="max-width:560px">
+
+    <p><strong>2–8. Confirm the signal, switch to Long-only, then tune Stop Loss → Chandelier → Trailing Stop using the Histogram.</strong> Lengthening Williams %R to (42,8) and restricting to Long-only trades cut the count from 317 to 47 on its own — most of the original noise was coming from an over-sensitive signal and the Short side. With Stop Loss (4%/2%), a Progressive Trailing Stop, and a 3×(5) Chandelier Exit then switched on and actually doing work — the Exit Reasons breakdown flips from 317 indicator-only exits to 22 Stop Loss, 2 Trailing Stop, and 23 Chandelier exits — Profit Factor rose to 2.28 and total return to $19,022 (190.22%). Reading the Histogram at this stage: the red (losing) bars cluster almost entirely in the -5% to 0% bucket with only a small -10% to -5% tail, and the green (winning) bars stretch out to +25–30%, mostly closed via Chandelier or Trailing Stop rather than the raw signal — exactly the shape the method describes as the signature of exits doing their job.</p>
+    <img src="images/example_spy_tuned_pass1.png" alt="ΔPROBE SPY Williams %R (42,8) Long-only, first tuning pass — 47 trades, Profit Factor 2.28" style="max-width:560px">
+
+    <p><strong>9. Short-only, tested and disabled.</strong> Running the same process on the Short side alone showed it dragging on overall PnL rather than adding to it — a common outcome on a broad index like SPY, which has a persistent long-term upward drift. Shorts were switched off entirely rather than force-tuned into profitability.</p>
+
+    <p><strong>10. Final result.</strong> One more refinement pass — lengthening the signal component to (42,20), tightening Stop Loss back to 2%/2%, and disabling Trailing Stop entirely in favor of Chandelier Exit alone as the trailing mechanism — brought the count down to 39 trades and Profit Factor up to 2.96, with total return at $20,452.65 (204.53%) against a 15.58% CAGR — finally, narrowly, ahead of this run's SPY buy-and-hold (200.67%, 15.64% CAGR). The margin is modest, deliberately: SPY buy-and-hold is a genuinely hard benchmark to beat by a wide margin, and a realistic worked example should show that rather than overstate it.</p>
+    <img src="images/example_spy_final_pnl.png" alt="ΔPROBE SPY Williams %R (42,20) Long-only, final tuned configuration — 39 trades, Profit Factor 2.96" style="max-width:560px">
+    <p>The final Assessment box keeps the result honest: top 3 trades are 62.7% of total PnL (moderate concentration, not extreme), Walk-Forward shows out-of-sample Profit Factor (4.75) well ahead of in-sample (2.12), and Optimisation Priority still flags Chandelier Exit as the top remaining lever (~56% opportunity, low confidence) followed by Stop Loss (~13%, high confidence) — plus an Entry Quality flag noting the entry still fires immediately on "Above Signal Line" with no confirmation, meaning there's room left even after this full tuning pass.</p>
+    <img src="images/example_spy_final_assessment.png" alt="ΔPROBE SPY Williams %R (42,20) final configuration — Strategy Assessment flags and Optimisation Priority" style="max-width:560px">
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 11 — TRADE BASIS RECIPES -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s11" class="fade-in">
+    <div class="section-header"><span class="section-num">11</span><h2>Trade Basis — Configuration Recipes</h2></div>
+
+    <p class="lede">Complete, final configurations for each Trade Basis pattern from §3 — settings plus the resulting performance, so each pattern is concrete rather than abstract.</p>
+
+    <div class="jumpmenu">
+      <div class="jumpmenu-label">Jump to example</div>
+      <a class="jump-link" href="#ex1">1 · TQQQ Direct</a>
+      <a class="jump-link" href="#ex2">2 · TQQQ RSI + Next-Day</a>
+      <a class="jump-link" href="#ex3">3 · QQQ Same-Day vs. Next-Day</a>
+      <a class="jump-link" href="#ex4">4 · SQQQ via 100/QQQ</a>
+      <a class="jump-link" href="#ex5">5 · META, Pure Signal (No SL/TS/CE)</a>
+    </div>
+
+    <h3 id="ex1">Example 1 — TQQQ, Direct (no Alternate Ticker) · Same-Day Execution</h3>
+    <p>This is the simplest Trade Basis case: TQQQ traded directly, no alternate signal ticker. Backtested 2019–2026 with Stochastic (13,5,3), both Longs and Shorts enabled, a Progressive Trailing Stop, and a 200-day SMA regime filter (Shorts only), the strategy closed 85 trades for a net $836,404 (8,364%) on a $10,000 starting balance — a 79.7% CAGR at a 2.43 Profit Factor. The histogram shows the shape behind that number: a 32.9% win rate carried by a long tail of outsized winners (up to +135–140%), against a dense cluster of small losses in the -5% to 0% range (41 trades alone in the -5% to 0% bucket) — a classic trend-follower profile, not a high-hit-rate one.</p>
+    <img src="images/example1_tqqq_direct_pnl.png" alt="ΔPROBE TQQQ direct configuration — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+    <p>The Assessment box is where the caveats live. The single best trade accounts for 49.3% of all profit, and the top 3 account for 93.5% — remove them and ~$54,226 remains, so this specific result leans heavily on a handful of outlier moves rather than broad, repeatable edge. Walk-Forward validation shows 56.2% degradation between in-sample and out-of-sample periods (🟡 moderate, not 🔴 failing, but worth watching), and Optimisation Priority flags Stop Loss as the highest-opportunity lever — 53 long and 2 short stop-outs are dragging 41.1% of gross wins, with an estimated ~20.2% of total PnL recoverable by reducing SL frequency (the Long Regime Filter is currently OFF, Short is ON).</p>
+    <img src="images/example1_tqqq_direct_assessment.png" alt="ΔPROBE TQQQ direct configuration — Strategy Assessment flags and Optimisation Priority">
+
+    <h3 id="ex2">Example 2 — TQQQ, RSI (14,14), Long-only, Next-Day Execution</h3>
+    <p>Example 2 pairs TQQQ with a different indicator — RSI (14,14), Long-only (Shorts disabled), the same 200-day SMA regime filter and 2019–2026 window as Example 1. Under this configuration the strategy closed 56 trades for $711,897 net (7,119%) — a 74.4% CAGR at a 2.74 Profit Factor, roughly half Example 1's trade count but a notably higher win rate (51.8% vs. 32.9%), since a Long-only RSI setup removes the short-side noise entirely.</p>
+    <img src="images/example2_tqqq_rsi_pnl.png" alt="ΔPROBE TQQQ RSI (14,14) Long-only configuration — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">Platform setting, not a ΔPROBE input</div>
+        <p><strong>Order execution delay</strong> lives in TradingView's own Strategy Properties dialog (Properties tab → Broker Emulator), not in the script's input panel. Setting it to <strong>One tick</strong> delays order fills slightly rather than assuming an instant fill at the exact signal price — a more conservative execution assumption, closer to what a next-day-open fill would actually look like, worth knowing about separately from anything ΔPROBE itself controls.</p>
+      </div>
+    </div>
+    <img src="images/example2_tqqq_order_execution_delay.jpg" alt="TradingView Strategy Properties dialog — Order execution delay set to One tick">
+
+    <p>The Assessment box again keeps the number honest: the single best trade is 51.5% of all profit and the top 3 are 96.9% — remove them and ~$22,350 remains, so concentration risk persists even with a completely different indicator and direction setup. The encouraging signal here is Walk-Forward validation: out-of-sample Profit Factor (2.78) actually <em>exceeds</em> in-sample (2.58) — a rare 🟢 "holds up on unseen data" verdict, in contrast to Example 1's degradation. Optimisation Priority again ranks Stop Loss as the top lever (21 stop-outs dragging 36.5% of gross wins, ~14% total PnL opportunity if the currently-OFF Long Regime Filter were enabled), and separately flags Entry Quality: RSI's <strong>Above Signal Line</strong> entry fires immediately with no confirmation, and switching to <strong>Cross above Signal</strong> or <strong>Cross above Oversold</strong> would wait for the signal to actually turn before entering.</p>
+    <img src="images/example2_tqqq_rsi_assessment.png" alt="ΔPROBE TQQQ RSI Long-only configuration — Strategy Assessment flags and Optimisation Priority">
+
+    <h3 id="ex3">Example 3 — QQQ, Stochastic (5,5,5): Same-Day vs. Next-Day Execution</h3>
+    <p>Example 3 isolates a single variable: order execution timing. Same strategy, same ticker, same every other setting — QQQ with Stochastic (5,5,5), Long+Short, a 200-day SMA regime filter (Shorts only), and a Progressive Trailing Stop — run twice: once with the default same-bar-close fill ("Same-Day"), and once with TradingView's Order Execution Delay pushing every fill to the next bar's open ("Next-Day"). Same-Day closed 47 trades for $48,259 net (482.6%) — a 26.4% CAGR at a 3.12 Profit Factor, with a 34.8% win rate carried by a 5.84x average win-to-loss ratio.</p>
+    <img src="images/example3_qqq_sameday_pnl.png" alt="ΔPROBE QQQ Stochastic (5,5,5) Same-Day execution — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+    <p>The Same-Day Assessment box shows a healthy structure: Profit Factor 3.12 is rated Robust, and Walk-Forward degradation of just 10.6% earns a 🟢 "holds up on unseen data" verdict. Optimisation Priority puts Chandelier Exit at the top of the list here — a different lever than Example 1 or 2 flagged — with 41.1% capture on winners against an 80% ceiling, representing an estimated ~41% of total PnL as (low-confidence) upside if that exit could be improved; Stop Loss is the second lever, at an estimated 11.3% opportunity.</p>
+    <img src="images/example3_qqq_sameday_assessment.png" alt="ΔPROBE QQQ Stochastic Same-Day execution — Strategy Assessment flags and Optimisation Priority">
+
+    <p>Next-Day execution — same settings, only the fill timing changed — closed 50 trades (3 more than Same-Day) for $31,333 net (313.3%): a 20.9% CAGR at a 2.70 Profit Factor. Total profit dropped roughly 35% despite the extra trades, because giving up the signal bar's close for the following day's open costs real edge on average: Avg Win fell from $4,442 to $2,618 (nearly halved) while Avg Loss only fell from $760 to $614, compressing the win/loss ratio from 5.84x down to 4.27x. Max Drawdown was almost identical either way (15.96% vs. 15.95%) — the risk profile didn't change, only the average efficiency of each trade.</p>
+    <img src="images/example3_qqq_nextday_pnl.png" alt="ΔPROBE QQQ Stochastic (5,5,5) Next-Day execution — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+    <p>The Next-Day Assessment box tells a similarly healthy story on validity — Walk-Forward degradation is actually negative (-28%), meaning out-of-sample Profit Factor (3.1) exceeded in-sample (2.42) — and the same two levers top Optimisation Priority (Chandelier Exit ~36.8% opportunity, Stop Loss ~13.5%). The takeaway: this strategy's edge is meaningfully sensitive to execution timing — worth knowing before assuming a backtest translates directly into a live, next-bar-filled result.</p>
+    <img src="images/example3_qqq_nextday_assessment.png" alt="ΔPROBE QQQ Stochastic Next-Day execution — Strategy Assessment flags and Optimisation Priority">
+
+    <h3 id="ex4">Example 4 — SQQQ via Alternate Ticker (100/NASDAQ:QQQ) · Inverse Pattern</h3>
+    <p>Example 4 demonstrates the inverse Trade Basis pattern from §3: SQQQ traded directly, with the indicator instead calculating off <strong>100/NASDAQ:QQQ</strong> — a mathematically inverted, rescaled version of QQQ's price, so a "bullish" reading on that basis corresponds to QQQ falling, which is exactly when you'd want to be long SQQQ. Shorts are disabled here — shorting an already-inverse, decay-prone instrument compounds structural drag, so it's tested Long-only, with the Regime Filter for Longs turned ON.</p>
+    <img src="images/example4_alt_ticker_settings.png" alt="ΔPROBE Trade Basis settings — Use Alternate Ticker for Signals enabled, Alternate Ticker set to 100/NASDAQ:QQQ">
+
+    <p>Across the full 2019–2026 window, the strategy only found conditions to trade in 2022 — the one year in that span QQQ was in a sustained decline — closing 6 trades for $5,452.50 (54.5%) at a 66.7% win rate and 3.52 Profit Factor, with an 8.7% max drawdown. Every other year shows zero trades: the Long Regime Filter, evaluated on this inverted basis, simply wasn't satisfied outside that one downtrend. For comparison, buy-and-hold on SQQQ itself lost 334% over the same window — a stark illustration of inverse-leveraged decay in a mostly-rising market — so even a small handful of well-timed entries meaningfully outperformed passively holding the instrument.</p>
+    <img src="images/example4_alt_ticker_pnl.png" alt="ΔPROBE SQQQ via 100/NASDAQ:QQQ configuration — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+
+    <p>With only 6 closed trades, this example sits well below the 10- and 20-trade minimums for Optimisation Priority and Walk-Forward Validation, so neither section renders — exactly the gating behaviour described in §08 and the FAQ, shown here in practice rather than just asserted. What the Assessment box does show: the top trade alone is 47.9% of all profit and the top 3 trades are 118.7% of it — removing them would leave the strategy at a net loss (-$1,018), underscoring how thin a 6-trade sample really is. Chandelier Exit captured 52.2% of the available favorable move across its 4 winning exits, and the single losing streak (1 trade) kept sequential exposure low at ~$1,082.</p>
+    <img src="images/example4_alt_ticker_assessment.png" alt="ΔPROBE SQQQ via 100/NASDAQ:QQQ configuration — Strategy Assessment flags">
+
+    <h3 id="ex5">Example 5 — META, EMA (200,50), Pure Signal Only (No SL / Trail / Chandelier)</h3>
+    <p>Example 5 deliberately strips the strategy down to its simplest possible form: META with an EMA(200,50) crossover — enter when price is above the 50-period signal line, exit when it crosses back below — and nothing else. No Stop Loss, no Trailing Stop, no Chandelier Exit; the Indicator Exit is the <em>only</em> thing that ever closes a position, paired with Next-Day order execution. This pure signal-only approach closed just 3 trades since 2019 for a net $32,658 (326.6%) — a 21.4% CAGR at an extraordinary 30.09 Profit Factor — comfortably ahead of META's own buy-and-hold return over the same period (285.76%, 19.83% CAGR) despite trading a tiny fraction as often, and with a lower max drawdown than buy-and-hold too (16.84% vs. 76.74%).</p>
+    <img src="images/example5_meta_ema_pnl.png" alt="ΔPROBE META EMA (200,50) pure-signal configuration — Active Settings, Yearly PnL Table, and Trade Distribution Histogram">
+    <p>That headline number needs the Assessment box's context, though: with only 3 trades, the top trade alone is 90.8% of all profit and the top 3 are 103.4% of it — remove them and the strategy is actually slightly negative (-$1,123). This is the extreme case of the concentration risk flagged throughout every other example in this section: a strategy that trades this rarely lives or dies on whether it happens to catch one or two genuinely enormous moves, and 3 trades is far too small a sample to draw real confidence from — Optimisation Priority and Walk-Forward Validation both stay hidden here for exactly that reason. All three exits fired via the EMA signal line itself — the histogram's Exit Reasons breakdown shows zero Stop Loss, Trail, or Chandelier exits, 3 for 3 Indicator Exit — capturing 42.8% of the available favorable move on average.</p>
+    <img src="images/example5_meta_ema_assessment.png" alt="ΔPROBE META EMA (200,50) pure-signal configuration — Strategy Assessment flags">
+  </section>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 12 — FAQ & TROUBLESHOOTING -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s12" class="fade-in">
+    <div class="section-header"><span class="section-num">12</span><h2>FAQ &amp; Troubleshooting</h2></div>
+
+    <h3>My entry signal looks valid on the chart but no trade fired</h3>
+    <p>Check, in order: is a position already open (a new entry requires no existing position)? Is the Regime Filter blocking this direction? For shorts — is the No Short Zone spatial or temporal filter blocking it? Did a stop-loss exit just happen and re-entry suppression is still counting down? For high-priced instruments specifically, see the next question — it's a common, separate cause.</p>
+
+    <h3>No trades fire at all on a high-priced instrument (e.g. BTCUSD)</h3>
+    <p>ΔPROBE doesn't support fractional-share position sizing — it needs at least one whole unit of the instrument to fit within your <strong>Initial Capital</strong>. If one unit costs more than your Initial Capital (a single BTCUSD often trades well above the script's $10,000 default), no order can be sized and nothing fires. This isn't a ΔPROBE input — Initial Capital lives in TradingView's own Strategy Properties dialog (Properties tab → General → Initial capital). Raise it comfortably above the instrument's price and re-run.</p>
+
+    <h3>The strategy shows an "Unsupported Chart Type" warning and won't trade</h3>
+    <p>ΔPROBE only works on standard chart types — line, bar, or candlestick — where <code>close</code>/<code>high</code>/<code>low</code> reflect real, tradeable prices. Heikin Ashi, Renko, Kagi, Point &amp; Figure, Line Break, and Range charts substitute synthetic, calculated prices that were never actually traded; using those for stop levels, trailing stops, and fills would produce backtest results you couldn't achieve live. The strategy detects this automatically and blocks all trading — switch to a standard chart type to run it.</p>
+
+    <h3>Why is my short position size smaller than I expected?</h3>
+    <p>Short Margin Safety intentionally reduces size so the margin-call threshold sits beyond your stop loss plus buffer — see §5. This is deliberate, not a bug.</p>
+
+    <h3>Walk-Forward / Optimisation Priority sections aren't showing</h3>
+    <p>Minimum trade-count gates: 20 closed trades for Walk-Forward, 10 for Optimisation Priority. Below that, the numbers are unreliable enough that the script hides them rather than showing a misleading verdict.</p>
+
+    <h3>My Trailing Stop and Chandelier Exit never seem to fire</h3>
+    <p>Check Trailing Stop Mode isn't set to <strong>Off</strong> while Chandelier Exit is also disabled — that combination leaves only Stop Loss and Indicator Exit as exit mechanisms.</p>
+
+    <h3>Yearly PnL % looks different after I toggled "Reset to Initial Capital Each Year"</h3>
+    <p>That's expected — the % denominator changes (initial capital vs. compounding equity), not the underlying trades. See §7.</p>
+
+    <h3>The dashboard tables are overlapping or cut off</h3>
+    <p>Adjust position and font size per table independently. Row count grows automatically as you enable more optional sections (Extended Metrics, Buy &amp; Hold, Rolling Performance) — a smaller font or a different anchor corner usually resolves overlap with other panels.</p>
+
+    <p style="margin-top:20px;color:var(--muted);font-size:14px"><em>More questions will be added here as they come up.</em></p>
+  </section>
+
+  <div class="disclaimer">Not financial advice. ΔPROBE is a backtesting and parameter-tuning tool; historical performance does not guarantee future results.<br><br>For personal use only. Do not redistribute, resell, or publicly repost this document.</div>
+
+</main>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lb-overlay" id="lbOverlay" onclick="lbClose(event)">
+  <div class="lb-esc">ESC to close · scroll to zoom · drag to pan</div>
+  <div class="lb-zoom-controls" onclick="event.stopPropagation()">
+    <div class="lb-zoom-btn" onclick="lbZoomBy(-0.25)">−</div>
+    <div class="lb-zoom-pct" id="lbZoomPct">100%</div>
+    <div class="lb-zoom-btn" onclick="lbZoomBy(0.25)">+</div>
+    <div class="lb-zoom-btn" onclick="lbZoomReset()" title="Reset to fit">⤢</div>
+  </div>
+  <div class="lb-close" onclick="document.getElementById('lbOverlay').classList.remove('open');document.body.style.overflow='';">✕</div>
+  <div class="lb-img-wrap" id="lbImgWrap" onclick="event.stopPropagation()">
+    <img id="lbImg" src="" alt="">
+  </div>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+// ── Sidebar active link
+const navSections = Array.from(document.querySelectorAll('section[id]'));
+let navClickOverride = null;
+function updateActiveNav() {
+  if (navClickOverride) return;
+  const triggerLine = 120;
+  let current = navSections[0];
+  for (const sec of navSections) {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= triggerLine) { current = sec; } else { break; }
+  }
+  document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+  const a = document.querySelector(`nav a[href="#${current.id}"]`);
+  if (a) a.classList.add('active');
+}
+let navTicking = false;
+window.addEventListener('scroll', () => {
+  if (!navTicking) {
+    requestAnimationFrame(() => { updateActiveNav(); navTicking = false; });
+    navTicking = true;
+  }
+}, {passive: true});
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (navClickOverride) clearTimeout(navClickOverride);
+    navClickOverride = setTimeout(() => { navClickOverride = null; updateActiveNav(); }, 1200);
+  });
+});
+updateActiveNav();
+
+// ── Fade in
+const obs2 = new IntersectionObserver(e => {
+  e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); });
+}, {threshold: .06});
+document.querySelectorAll('.fade-in').forEach(el => obs2.observe(el));
+
+// ── Lightbox with pan/zoom
+let lbScale = 1, lbFitScale = 1, lbNatW = 0, lbNatH = 0;
+let lbDragging = false, lbDragStartX = 0, lbDragStartY = 0, lbScrollStartX = 0, lbScrollStartY = 0;
+const LB_PAD_X = 44, LB_PAD_Y = 64; // reserved clearance so image doesn't sit under controls/caption when fit
+
+function lbRender() {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  const w = Math.round(lbNatW * lbScale);
+  const h = Math.round(lbNatH * lbScale);
+  lbImg.style.width = w + 'px';
+  lbImg.style.height = h + 'px';
+  document.getElementById('lbZoomPct').textContent = Math.round(lbScale * 100) + '%';
+  // Dynamic centering padding — avoids the flexbox+overflow "unreachable content" bug
+  const padX = Math.max(LB_PAD_X, (wrap.clientWidth - w) / 2);
+  const padY = Math.max(LB_PAD_Y, (wrap.clientHeight - h) / 2);
+  wrap.style.padding = padY + 'px ' + padX + 'px';
+  const overflowing = (w + LB_PAD_X * 2) > wrap.clientWidth || (h + LB_PAD_Y * 2) > wrap.clientHeight;
+  wrap.classList.toggle('zoomed', overflowing);
+}
+
+function lbOpen(src, caption) {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  lbImg.src = src;
+  lbImg.onload = () => {
+    lbNatW = lbImg.naturalWidth;
+    lbNatH = lbImg.naturalHeight;
+    const availW = wrap.clientWidth - LB_PAD_X * 2, availH = wrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+    lbScale = lbFitScale;
+    lbRender();
+    wrap.scrollLeft = 0; wrap.scrollTop = 0;
+  };
+  document.getElementById('lbCaption').textContent = caption || '';
+  document.getElementById('lbOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbClose(e) {
+  if (e && e.target !== document.getElementById('lbOverlay')) return;
+  document.getElementById('lbOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbZoomBy(delta) {
+  const wrap = document.getElementById('lbImgWrap');
+  const cx = wrap.clientWidth / 2 + wrap.scrollLeft, cy = wrap.clientHeight / 2 + wrap.scrollTop;
+  lbZoomAt(delta, cx, cy);
+}
+function lbZoomAt(delta, pointerX, pointerY) {
+  const wrap = document.getElementById('lbImgWrap');
+  const oldScale = lbScale;
+  const oldW = lbNatW * oldScale, oldH = lbNatH * oldScale;
+  const ratioX = oldW > 0 ? pointerX / oldW : 0.5;
+  const ratioY = oldH > 0 ? pointerY / oldH : 0.5;
+  let newScale = oldScale + delta * oldScale; // multiplicative-ish step
+  newScale = Math.max(lbFitScale * 0.4, Math.min(newScale, 6));
+  lbScale = newScale;
+  lbRender();
+  const newW = lbNatW * newScale, newH = lbNatH * newScale;
+  wrap.scrollLeft = Math.max(0, ratioX * newW - wrap.clientWidth / 2);
+  wrap.scrollTop = Math.max(0, ratioY * newH - wrap.clientHeight / 2);
+}
+function lbZoomReset() {
+  lbScale = lbFitScale;
+  lbRender();
+  const wrap = document.getElementById('lbImgWrap');
+  wrap.scrollLeft = 0; wrap.scrollTop = 0;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('lbOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  if (document.getElementById('lbOverlay').classList.contains('open')) {
+    if (e.key === '+' || e.key === '=') lbZoomBy(0.25);
+    if (e.key === '-' || e.key === '_') lbZoomBy(-0.25);
+    if (e.key === '0') lbZoomReset();
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('main img:not(#lbImg)').forEach(img => {
+    img.classList.add('zoomable');
+    const wrap = document.createElement('div');
+    wrap.className = 'zoomable-wrap';
+    img.parentNode.insertBefore(wrap, img);
+    wrap.appendChild(img);
+    const caption = img.alt || '';
+    const fullSrc = img.getAttribute('src');
+    img.addEventListener('click', () => lbOpen(fullSrc, caption));
+  });
+
+  const lbWrap = document.getElementById('lbImgWrap');
+
+  // Scroll-wheel zoom, centered on cursor
+  lbWrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    lbZoomAt(e.deltaY < 0 ? 0.2 : -0.2, pointerX, pointerY);
+  }, {passive: false});
+
+  // Drag to pan
+  lbWrap.addEventListener('mousedown', e => {
+    if (e.target.closest('.lb-zoom-controls, .lb-close')) return;
+    lbDragging = true;
+    lbWrap.classList.add('grabbing');
+    lbDragStartX = e.clientX; lbDragStartY = e.clientY;
+    lbScrollStartX = lbWrap.scrollLeft; lbScrollStartY = lbWrap.scrollTop;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!lbDragging) return;
+    lbWrap.scrollLeft = lbScrollStartX - (e.clientX - lbDragStartX);
+    lbWrap.scrollTop = lbScrollStartY - (e.clientY - lbDragStartY);
+  });
+  window.addEventListener('mouseup', () => { lbDragging = false; lbWrap.classList.remove('grabbing'); });
+
+  // Double-click to toggle between fit and 100% native
+  lbWrap.addEventListener('dblclick', e => {
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    if (Math.abs(lbScale - lbFitScale) < 0.02) {
+      lbZoomAt(1 - lbScale, pointerX, pointerY); // jump to 100%
+    } else {
+      lbZoomReset();
+    }
+  });
+
+  // Re-fit on window resize while open
+  window.addEventListener('resize', () => {
+    if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+    const availW = lbWrap.clientWidth - LB_PAD_X * 2, availH = lbWrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+  });
+});
+// ── Basic copy deterrent (mild — stops casual copy-paste only, see reply for scope) ──
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && ['c','a','x','s','p','u'].includes(k)) e.preventDefault();
+  if (k === 'f12') e.preventDefault();
+  if (mod && e.shiftKey && ['i','j','c'].includes(k)) e.preventDefault();
+});
+</script>
+
+</body>
+</html>
