@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<!-- ΔEarningsIQ User Guide — built from the reusable guide template. Keep images/ next to this file. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ΔEarningsIQ — Earnings, Health &amp; Valuation · User Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════ CUSTOMIZE: COLORS ══════════════ */
+:root {
+  --bg:#080c10; --bg2:#0e1520; --bg3:#141f2e; --bg4:#1a2840;
+  --border:#1c2e42; --border2:#243650;
+  --accent:#38bdf8; --accent2:#fbbf24; --accent3:#a78bfa;   /* decorative brand colors — change per product */
+  --amber:#f59e0b; --red:#ef4444; --green:#22c55e; --purple:#a78bfa; /* semantic — leave as-is unless meaning differs */
+  --text:#dde8f5; --muted:#4a6a88; --label:#7a9ab8;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Syne',sans-serif;
+  --body:'Inter',sans-serif;
+}
+/* ══════════════ /CUSTOMIZE: COLORS ══════════════ */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.75;overflow-x:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* ── NAV ── */
+nav{position:fixed;left:0;top:0;bottom:0;width:248px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;overflow-y:auto;z-index:100;isolation:isolate}
+.nav-logo{padding:0 22px 24px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.nav-logo-tag{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px}
+.nav-logo-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.nav-logo-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.nav-section-label{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent3);letter-spacing:.16em;text-transform:uppercase;padding:22px 22px 9px;margin-top:2px;border-top:1px solid var(--border)}
+nav a{display:block;padding:8px 22px;color:var(--label);text-decoration:none;font-size:14px;transition:all .15s;border-left:2px solid transparent;line-height:1.4}
+nav a:hover{color:var(--accent);border-left-color:var(--accent);background:rgba(56,189,248,.04)}
+nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(56,189,248,.07)}
+nav a .nav-num{font-family:var(--mono);font-size:13px;color:var(--muted);display:block;margin-bottom:1px}
+nav a.nav-pending{opacity:.5}
+nav a.nav-pending .nav-num::after{content:' ○';color:var(--amber)}
+
+/* ── MAIN ── */
+main{margin-left:248px;padding:0 64px 100px;max-width:1120px;position:relative;z-index:1}
+
+/* ── HERO ── */
+.hero{padding:76px 0 60px;border-bottom:1px solid var(--border);margin-bottom:68px}
+.hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--accent),transparent);opacity:.3}
+.hero h1{font-family:var(--sans);font-size:56px;font-weight:800;line-height:1.0;color:var(--text);margin-bottom:22px;letter-spacing:-.02em}
+.hero h1 .accent-mark{color:var(--accent)}
+.hero h1 .sub{display:block;font-size:20px;font-weight:400;color:var(--label);margin-top:10px;letter-spacing:0}
+.hero-desc{font-size:17px;color:var(--label);max-width:640px;line-height:1.7;font-weight:300;margin-bottom:30px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:13px;padding:5px 13px;border-radius:4px;letter-spacing:.04em}
+.badge-1{background:rgba(56,189,248,.1);color:var(--accent);border:1px solid rgba(56,189,248,.22)}
+.badge-2{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+.badge-3{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.badge-4{background:rgba(34,211,238,.1);color:var(--accent3);border:1px solid rgba(34,211,238,.22)}
+
+/* ── SECTIONS ── */
+section{margin-bottom:80px;scroll-margin-top:28px}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--accent);opacity:.7;min-width:30px}
+h2{font-family:var(--sans);font-size:28px;font-weight:700;color:var(--text)}
+h3{font-family:var(--sans);font-size:18px;font-weight:600;color:var(--accent2);margin:28px 0 12px;letter-spacing:.01em}
+h4{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--text);margin:18px 0 8px}
+p{color:var(--label);margin-bottom:14px;line-height:1.8;max-width:760px}
+p.lede{font-size:17.5px;max-width:720px}
+ul,ol{margin:0 0 16px 22px;max-width:740px;color:var(--label)}
+li{margin-bottom:7px;line-height:1.7}
+strong{color:var(--text);font-weight:500}
+
+/* ── TABLES ── */
+.ref-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;max-width:900px}
+.ref-table th{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--border)}
+.ref-table td{padding:12px 16px;border-bottom:1px solid rgba(28,46,66,.5);color:var(--label);vertical-align:top;line-height:1.65}
+.ref-table tr:hover td{background:rgba(56,189,248,.025)}
+.ref-table td:first-child{font-family:var(--mono);font-size:13px;color:var(--accent2);white-space:nowrap}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:6px;padding:16px 20px;margin:20px 0;border-left:3px solid;display:flex;gap:14px;align-items:flex-start;max-width:760px}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1}
+.callout-title{font-family:var(--sans);font-size:15px;font-weight:600;margin-bottom:5px}
+.callout p{font-size:14.5px;margin:0;line-height:1.68}
+.callout-cyan{background:rgba(56,189,248,.06);border-color:var(--accent)}
+.callout-cyan .callout-title{color:var(--accent)}
+.callout-green{background:rgba(34,197,94,.06);border-color:var(--green)}
+.callout-green .callout-title{color:var(--green)}
+.callout-amber{background:rgba(245,158,11,.07);border-color:var(--amber)}
+.callout-amber .callout-title{color:var(--amber)}
+.callout-red{background:rgba(239,68,68,.06);border-color:var(--red)}
+.callout-red .callout-title{color:var(--red)}
+.callout-purple{background:rgba(167,139,250,.06);border-color:var(--purple)}
+.callout-purple .callout-title{color:var(--purple)}
+
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);color:var(--accent2);padding:2px 8px;border-radius:3px;border:1px solid var(--border)}
+
+/* ── INPUT / SETTINGS REFERENCE GROUPS ── */
+.input-group{background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin:18px 0;overflow:hidden;max-width:900px}
+.input-group-header{background:var(--bg3);padding:10px 18px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.input-row{display:grid;grid-template-columns:220px 110px 1fr;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(28,46,66,.35);align-items:start}
+.input-row:last-child{border-bottom:none}
+.input-name{font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.5}
+.input-default{font-family:var(--mono);font-size:12px;color:var(--amber);padding:2px 8px;background:rgba(245,158,11,.08);border-radius:3px;border:1px solid rgba(245,158,11,.18);white-space:nowrap;display:inline-block}
+.input-desc{font-size:14px;color:var(--label);line-height:1.68}
+
+/* ── SCREENSHOT PLACEHOLDER (use while real screenshots aren't ready yet) ── */
+.ss-placeholder{background:var(--bg2);border:2px dashed var(--border2);border-radius:8px;padding:40px 30px;text-align:center;margin:24px 0;position:relative;max-width:800px}
+.ss-placeholder-label{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.ss-placeholder-title{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ss-placeholder-desc{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:480px;margin:0 auto 12px}
+.ss-placeholder-dim{font-family:var(--mono);font-size:12px;color:var(--border2);margin-top:10px}
+
+/* ── IN-SECTION JUMP MENU (for sections with several examples/sub-items) ── */
+.jumpmenu{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;max-width:900px}
+.jumpmenu-label{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;width:100%;margin-bottom:2px}
+.jump-link{font-family:var(--mono);font-size:13px;color:var(--label);text-decoration:none;padding:6px 12px;border:1px solid var(--border2);border-radius:4px;background:var(--bg3);transition:all .15s}
+.jump-link:hover{color:var(--accent);border-color:var(--accent);background:rgba(56,189,248,.08)}
+
+/* ── PENDING / TODO BOX (visible in-progress marker while drafting) ── */
+.pending-box{background:var(--bg2);border:1.5px dashed var(--border2);border-radius:6px;padding:20px 22px;max-width:760px;margin:10px 0 24px}
+.pending-tag{font-family:var(--mono);font-size:11.5px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.pending-box p{color:var(--label);font-size:14.5px;margin-bottom:8px}
+.pending-box ul{margin:6px 0 0 18px}
+.pending-box li{font-size:14px;color:var(--label)}
+
+/* ── LIGHTBOX (pan + scroll-wheel zoom) ── */
+.lb-overlay{display:none;position:fixed;top:0;left:248px;right:0;bottom:0;background:rgba(0,0,0,.93);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lb-overlay.open{display:flex}
+.lb-img-wrap{position:relative;width:100%;height:100%;box-sizing:border-box;overflow:auto;cursor:zoom-in}
+.lb-img-wrap.zoomed{cursor:grab}
+.lb-img-wrap.zoomed.grabbing{cursor:grabbing}
+.lb-overlay img{display:block;border-radius:6px;box-shadow:0 24px 80px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08);cursor:inherit;user-select:none}
+.lb-close{position:absolute;top:14px;right:18px;width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--label);transition:all .15s;z-index:100000;line-height:1}
+.lb-close:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-caption{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.4);letter-spacing:.08em;pointer-events:none;z-index:100000}
+.lb-esc{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.28);letter-spacing:.1em;pointer-events:none;z-index:100000}
+.lb-zoom-controls{position:absolute;top:14px;left:18px;display:flex;gap:6px;z-index:100000}
+.lb-zoom-btn{width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:16px;color:var(--label);transition:all .15s;user-select:none}
+.lb-zoom-btn:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-zoom-pct{min-width:52px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;color:var(--label);padding:0 8px}
+.zoomable{cursor:zoom-in;transition:opacity .15s;display:block;max-width:100%;height:auto}
+.zoomable:hover{opacity:.88}
+.zoomable-wrap{position:relative;margin:24px 0;max-width:800px;display:inline-block}
+.zoomable-wrap::after{content:'🔍 Click to zoom';position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.6);padding:5px 11px;border-radius:4px;pointer-events:none;letter-spacing:.06em;transition:opacity .2s}
+
+.img-sm{max-width:560px}   /* apply to <img> for smaller screenshots (e.g. per-example panels) */
+.img-caption{text-align:center;font-size:13px;color:var(--muted);margin-top:-10px;max-width:800px}
+.fig-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;max-width:900px;margin:24px 0}
+.fig-pair .zoomable-wrap{margin:0;display:block}
+.fig-pair-label{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.ref-table.wide{max-width:1040px}   /* for 5+ column tables */
+.note-muted{margin-top:20px;color:var(--muted);font-size:14px}
+
+/* ── FADE IN ── */
+.fade-in{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ── DISCLAIMER / FOOTER NOTE ── */
+.disclaimer{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;font-size:12.5px;color:var(--muted);margin-top:60px;text-align:center;line-height:1.7;max-width:900px}
+
+/* ── RESPONSIVE (probe guide had none — nav and lightbox offset break on narrow screens) ── */
+@media (max-width:900px){
+  nav{position:static;width:auto;bottom:auto;border-right:none;border-bottom:1px solid var(--border);max-height:none}
+  main{margin-left:0;padding:0 22px 80px}
+  .lb-overlay{left:0}
+  .hero h1{font-size:40px}
+  .input-row{grid-template-columns:1fr;gap:6px}
+  .ref-table{display:block;overflow-x:auto}
+}
+
+/* ── WATERMARK (tiled diagonally across every section) ── */
+.watermark-overlay{position:fixed;inset:0;z-index:40;pointer-events:none;background-repeat:repeat}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ CUSTOMIZE: NAV ══════════════ -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-tag">User Guide</div>
+    <div class="nav-logo-title">ΔEarningsIQ</div>
+    <div class="nav-logo-sub">Earnings, Health &amp; Valuation</div>
+  </div>
+
+  <div class="nav-section-label">Foundation</div>
+  <a href="#s1"><span class="nav-num">01</span>What is ΔEarningsIQ?</a>
+  <a href="#s2"><span class="nav-num">02</span>Core Concepts</a>
+
+  <div class="nav-section-label">Reference</div>
+  <a href="#s3"><span class="nav-num">03</span>Dashboard Tour</a>
+  <a href="#s4"><span class="nav-num">04</span>Valuation Models</a>
+  <a href="#s5"><span class="nav-num">05</span>Settings Reference</a>
+  <a href="#s6"><span class="nav-num">06</span>Alerts</a>
+
+  <div class="nav-section-label">Practical Guide</div>
+  <a href="#s7"><span class="nav-num">07</span>Worked Examples</a>
+
+  <div class="nav-section-label">Support</div>
+  <a href="#s8"><span class="nav-num">08</span>FAQ &amp; Troubleshooting</a>
+</nav>
+<!-- ══════════════ /CUSTOMIZE: NAV ══════════════ -->
+
+<main>
+
+  <!-- ══════════════ CUSTOMIZE: HERO ══════════════ -->
+  <div class="hero">
+    <div class="hero-eyebrow">Fundamental analysis indicator for TradingView</div>
+    <h1><span class="accent-mark">Δ</span>EarningsIQ<span class="sub">Earnings, Health &amp; Valuation</span></h1>
+    <p class="hero-desc">ΔEarningsIQ puts a stock's recent earnings reports, financial-health scores and five valuation models on your chart — two tables, plus a colour-coded marker on every earnings bar. It shows how the business is trending and how today's price compares with several fair-value lenses. It does not tell you when to buy or sell.</p>
+    <div class="hero-badges">
+      <span class="badge badge-1">EPS &amp; Sales Momentum</span>
+      <span class="badge badge-2">ROIC · ROE · Piotroski</span>
+      <span class="badge badge-3">5 Valuation Models</span>
+      <span class="badge badge-4">Quality Score 0–10</span>
+    </div>
+  </div>
+  <!-- ══════════════ /CUSTOMIZE: HERO ══════════════ -->
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s1" class="fade-in">
+    <div class="section-header"><span class="section-num">01</span><h2>What is ΔEarningsIQ?</h2></div>
+
+    <p class="lede">ΔEarningsIQ answers three questions about a stock, quarter by quarter: <strong>is the business accelerating, is it financially healthy, and is the price reasonable?</strong></p>
+    <p>Everything is built from data TradingView already holds for the symbol — reported and estimated EPS and revenue, return on equity and invested capital, the Piotroski F-Score, forward PE, book value and the Graham Number — and is drawn directly on the chart.</p>
+
+    <h3>What you get</h3>
+    <ul>
+      <li><strong>Main Table</strong> — up to eight past earnings periods with EPS and Sales growth (YoY, QoQ, surprise), ROE, ROIC, Piotroski F-Score and a composite Quality Score, plus the next expected report. See §3.</li>
+      <li><strong>Price Projection Table</strong> — for each period, five fair-value estimates (PE Projection, Graham, PEG, Phil Town Sticker, Margin-of-Safety price) next to the actual close, plus a <code>TODAY</code> row. See §3 and §4.</li>
+      <li><strong>Earnings Marker</strong> — a ▲ or ▼ under or over every earnings bar, coloured by that quarter's Quality Score, with a full snapshot on hover.</li>
+      <li><strong>Optional on-chart labels</strong> — individual metrics (EPS YoY, ROIC and so on) printed under the earnings bar.</li>
+      <li><strong>Alerts</strong> — 4 ready-made alert conditions, plus custom threshold alerts on 10 metrics. See §6. See §6.</li>
+    </ul>
+
+    <div class="callout callout-cyan">
+      <div class="callout-icon">Δ</div>
+      <div class="callout-body">
+        <div class="callout-title">A framework, not a signal</div>
+        <p>ΔEarningsIQ does not generate buy or sell signals. Fair-value models are only as good as their assumptions, and every one of them can be wrong. Use the tables to ask better questions about a company, not to skip the research.</p>
+      </div>
+    </div>
+
+    <h3>Requirements</h3>
+    <ul>
+      <li><strong>Symbols with reported earnings.</strong> Works on stocks that have quarterly EPS and revenue in TradingView. On ETFs, indices, crypto and similar symbols both tables show <em>No earnings data available</em>.</li>
+      <li><strong>Not compatible with the Pine Screener.</strong> The script makes more data requests than the Screener allows. Use chart alerts instead (§6).</li>
+      <li><strong>Some metrics may be N/A.</strong> ROIC, ROE and the Piotroski score are supplied by TradingView and are missing for some symbols (commonly financial companies and some smaller non-US stocks). The rest of the dashboard keeps working.</li>
+    </ul>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s2" class="fade-in">
+    <div class="section-header"><span class="section-num">02</span><h2>Core Concepts</h2></div>
+
+    <p class="lede">A few ideas explain almost everything you will see on screen.</p>
+
+    <h3>Three lenses</h3>
+    <table class="ref-table">
+      <tr><th>Lens</th><th>Question it answers</th><th>Where you see it</th></tr>
+      <tr><td>Momentum</td><td>Are earnings and sales growing faster or slower, and is the company beating expectations?</td><td>EPS / Sales YoY, QoQ and Surprise columns; Quality Score</td></tr>
+      <tr><td>Health</td><td>How efficiently does the business use capital, and how sound is its balance sheet?</td><td>ROE, ROIC and Piotroski columns</td></tr>
+      <tr><td>Valuation</td><td>What do several fair-value methods say the stock is worth versus its price?</td><td>Projection Table; marker tooltip</td></tr>
+    </table>
+
+    <h3>One row = one reported quarter</h3>
+    <p>Each row is an earnings report. The date label is <code>YY MMM</code> (for example <code>24 MAR</code>) and refers to the chart bar on which that report's data appeared. The script keeps the <strong>eight most recent</strong> periods. <em>Past Earnings Rows to Display</em> only trims how many are drawn: the growth rate always uses the <strong>last four</strong> stored periods and the historical-PE average uses all of them, whatever you display.</p>
+
+    <h3>How growth is measured</h3>
+    <ul>
+      <li><strong>YoY</strong> compares a period with the same quarter one year earlier (four reports back).</li>
+      <li><strong>QoQ</strong> compares a period with the report immediately before it.</li>
+      <li><strong>Surprise</strong> is <code>(Actual − Estimate) / |Estimate| × 100</code>. Positive is a beat, negative a miss.</li>
+      <li>Percentage changes divide by the absolute value of the base, so a move from a loss to a smaller loss reads as positive.</li>
+      <li><strong>Which EPS?</strong> Reported EPS is used when available, otherwise the analyst estimate, otherwise TradingView's standardized EPS.</li>
+    </ul>
+
+    <h3>Colours and bold text</h3>
+    <ul>
+      <li>Growth and surprise cells are <strong>green</strong> when positive, <strong>red</strong> when negative and grey when unavailable.</li>
+      <li>ROE, ROIC, Piotroski and Quality Score use threshold colours (see §3).</li>
+      <li><strong>Bold</strong> means the value improved versus the row above it. Surprise columns are never bold because each surprise stands alone.</li>
+    </ul>
+
+    <h3>The growth rate behind PEG and Phil Town</h3>
+    <p>PEG and Phil Town both need a forward growth rate. By default ΔEarningsIQ derives one automatically as the <strong>average EPS YoY growth of the last four quarters</strong>, limiting any single quarter's contribution and ignoring periods where the earnings base is near zero and applying a <strong>ceiling of 25%</strong> so that a single outstanding stretch cannot produce fantasy valuations. You can replace it with your own number (§5). The same current growth rate is applied to every row of the projection table; only the EPS and price inputs differ by row.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">Hover everything</div>
+        <p>Nearly every cell carries a tooltip. Hover over a date to see the raw inputs for that period, over a column header for the definition, and over the banner rows for warnings. Much of the detail lives there rather than on the face of the table.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s3" class="fade-in">
+    <div class="section-header"><span class="section-num">03</span><h2>Dashboard Tour</h2></div>
+
+    <p class="lede">Two movable tables and a marker on the chart. Here is what every part shows.</p>
+
+    <h3>The full view</h3>
+    <img src="images/dashboard_tour.png" alt="Full chart view: price chart with earnings markers on the left, the Main Table at top right and the Price Projection Table at bottom right">
+    <p class="img-caption">The full dashboard on a daily chart: green ▲ markers on earnings bars, Main Table (top right) and Projection Table (bottom right).</p>
+
+    <div class="jumpmenu">
+      <div class="jumpmenu-label">Jump to</div>
+      <a class="jump-link" href="#t-main">Main Table</a>
+      <a class="jump-link" href="#t-colors">Colour thresholds</a>
+      <a class="jump-link" href="#t-proj">Projection Table</a>
+      <a class="jump-link" href="#t-warn">Warning banner</a>
+      <a class="jump-link" href="#t-marker">Earnings Marker</a>
+      <a class="jump-link" href="#t-labels">On-chart labels</a>
+    </div>
+
+    <h3 id="t-main">Main Table — EPS, Sales &amp; Health</h3>
+
+    <img src="images/main_table.png" alt="Main Table for a sample stock: header banner, eight reported quarters, a yellow future-estimate row and the disclaimer footer">
+    <p class="img-caption">Main Table with short headers on. The yellow italic row is the next expected report.</p>
+
+    <h4>Banner row</h4>
+    <p>The top row shows <code>ΔEarningsIQ | TICKER | Growth mode | T-Rating | A-Consensus</code>.</p>
+    <ul>
+      <li><strong>Growth</strong> reads <em>auto</em>, <em>manual override</em> or <em>N/A</em>.</li>
+      <li><strong>T-Rating</strong> is TradingView's technical rating (Strong Sell to Strong Buy) for the <em>current chart timeframe</em>, so it changes when you change timeframe.</li>
+      <li><strong>A-Consensus</strong> condenses the analyst recommendation counts into Strong Buy, Buy, Hold, Sell or Strong Sell.</li>
+      <li>Hover the banner for your MARR and MOS settings, the number of quarters loaded, the MA and oscillator ratings and the full analyst breakdown.</li>
+    </ul>
+
+    <h4>Columns</h4>
+    <p>Headers below are shown in full form. With <em>Short Table Header</em> on (as in the screenshot) they read <code>EPS Y%</code>, <code>Sales Q%</code>, <code>F-Score</code>, <code>Score</code> and so on.</p>
+    <table class="ref-table wide">
+      <tr><th>Column</th><th>What it shows</th><th>Reading it</th><th>Colour / bold</th><th>Notes</th></tr>
+      <tr><td>DATE</td><td>Earnings bar, <code>YY MMM</code></td><td>Hover for every raw input of that period</td><td>—</td><td>Always shown</td></tr>
+      <tr><td>EPS YoY %</td><td>EPS vs same quarter last year</td><td>Primary growth read</td><td>Green / red; bold if higher than prior row</td><td></td></tr>
+      <tr><td>EPS QoQ %</td><td>EPS vs previous quarter</td><td>Sequential momentum; seasonal businesses swing</td><td>Green / red; bold if higher</td><td></td></tr>
+      <tr><td>EPS Surprise %</td><td>Actual vs analyst estimate</td><td>Positive = beat</td><td>Green / red</td><td>Needs both actual and estimate</td></tr>
+      <tr><td>Sales YoY / QoQ / Surprise %</td><td>Same three measures for revenue</td><td>Top-line confirmation of the EPS story</td><td>Green / red; YoY and QoQ bold when higher</td><td></td></tr>
+      <tr><td>ROE % (FQ)</td><td>Net income ÷ shareholders' equity</td><td>Profit on shareholders' money only</td><td>Threshold colours; bold if improving</td><td>Grey when book value is negative</td></tr>
+      <tr><td>ROIC % (FQ)</td><td>Return on all invested capital (equity and debt)</td><td>Harder to inflate with leverage; consistently above 10% hints at a moat</td><td>Threshold colours; bold if improving</td><td>Negative means capital is being destroyed</td></tr>
+      <tr><td>Piotroski (FQ)</td><td>0–9 financial-health score</td><td>Rising = improving health; falling = deterioration</td><td>Threshold colours; bold if improving</td><td>Less meaningful for unprofitable growth firms and financials</td></tr>
+      <tr><td>Quality Score</td><td>Proprietary composite, 0–10</td><td>Blends capital efficiency, earnings momentum and revenue momentum into one number</td><td>Threshold colours; bold at 8+</td><td>Measures momentum and quality; Piotroski measures health</td></tr>
+    </table>
+
+    <h4>Future estimate row</h4>
+    <p>When an analyst estimate exists for the next report, a yellow italic row marked with <code>*</code> appears at the bottom. It shows the expected report month, the EPS and revenue growth the estimates imply, and the countdown to the report in its tooltip. Surprise, ROE, ROIC, Piotroski and Quality Score show a dash because they cannot exist before the report.</p>
+
+    <h3 id="t-colors">Colour thresholds</h3>
+    <table class="ref-table wide">
+      <tr><th>Metric</th><th>Bright green</th><th>Green</th><th>Orange</th><th>Red</th><th>Grey / dark red</th></tr>
+      <tr><td>ROE</td><td>&gt; 20%</td><td>15–20%</td><td>5–15%</td><td>0–5%</td><td>Grey: below 0% or negative equity</td></tr>
+      <tr><td>ROIC</td><td>&gt; 20%</td><td>10–20%</td><td>5–10%</td><td>0–5%</td><td>Grey: below 0%</td></tr>
+      <tr><td>Piotroski</td><td>8–9</td><td>6–7</td><td>4–5</td><td>2–3</td><td>Dark red: 0–1</td></tr>
+      <tr><td>Quality Score</td><td>8–10</td><td>6–7</td><td>4–5</td><td>0–3</td><td>—</td></tr>
+    </table>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Compare ROE with ROIC</div>
+        <p>When both are high, the business itself is efficient. When ROE is high but ROIC is low, debt or buybacks are doing the work. If ROE exceeds ROIC by more than 10 points, that period's tooltip adds a gap warning. In that case trust ROIC.</p>
+      </div>
+    </div>
+
+    <h3 id="t-proj">Price Projection Table</h3>
+
+    <img src="images/projection_table.png" alt="Price Projection Table: warning banner, PE Proj, Graham, PEG, PhilTown, MOS and Close columns, eight reported quarters, a future row and the blue TODAY row">
+    <p class="img-caption">Projection Table. The orange banner is the growth-cap warning; the blue TODAY row shows each fair value and the percentage gap from the current price.</p>
+
+    <p>A second table shows what each valuation method said at each report, next to the price the stock actually traded at. Methods are explained in §4.</p>
+    <ul>
+      <li><strong>Period rows</strong> use that quarter's TTM EPS, forward PE, book value and close. The <strong>Close</strong> cell is coloured against that row's Phil Town Sticker and MOS price: bright green at or below MOS, light green below Sticker, red above Sticker.</li>
+      <li><strong>Future row</strong> (yellow) applies the current close and latest fundamentals. It is a "where do things stand now" row, not an independent forecast, and its Close cell is a dash.</li>
+      <li><strong>TODAY row</strong> (blue label) is the most actionable row. Each cell shows the fair value and, beneath it, the percentage gap from today's price: <code>+%</code> means the price is <em>above</em> that fair value, <code>−%</code> below. Each cell is coloured against <em>its own</em> fair value: bright green when the price is at or below that value after the margin-of-safety discount, light green when below the value, red when above it.</li>
+      <li>A <code>*</code> in front of a PE Proj value marks a low-confidence estimate (see the warning banner below).</li>
+      <li>A cell showing <code>N/A</code> has a reason in its tooltip (negative EPS, negative book value, missing forward PE and so on).</li>
+    </ul>
+
+    <h3 id="t-warn">Warning banner</h3>
+    <p>The top row of the projection table is blank when everything is normal. Otherwise it shows the most important warning, with a note if others are active; hover for the full list.</p>
+    <table class="ref-table wide">
+      <tr><th>Warning</th><th>Meaning</th><th>What to do</th><th>Affects</th><th>Common on</th></tr>
+      <tr><td>PE Proj: low confidence (*)</td><td>Trailing PE is very high, and either it is in line with the stock's own history (a persistent premium) or there are too few profitable prior quarters to judge. The historical average PE is used and every PE Proj value is marked <code>*</code>.</td><td>Treat PE Proj as a rough estimate; hover a cell to see which case applies.</td><td>PE Proj</td><td>Growth stocks with thin GAAP profits; recent profitability</td></tr>
+      <tr><td>Normalised PE in use</td><td>Trailing PE has spiked far above the stock's own history (or EPS is zero or negative with enough history), so the historical PE from profitable quarters replaces it.</td><td>Treat PE Proj as a rough estimate.</td><td>PE Proj</td><td>Cyclicals near a trough</td></tr>
+      <tr><td>Growth auto-capped at 25%</td><td>The auto growth rate hit its ceiling.</td><td>Projections may be understated for very fast growers; consider an override.</td><td>PEG, Phil Town, MOS</td><td>High-growth stocks</td></tr>
+      <tr><td>Manual growth override</td><td>You set the growth rate yourself.</td><td>Remember the numbers reflect your assumption, not the data.</td><td>PEG, Phil Town, MOS</td><td>Any, when set</td></tr>
+      <tr><td>Limited earnings data</td><td>Fewer than six quarters are available.</td><td>Averages rest on few points; be cautious.</td><td>All averages</td><td>Recent IPOs</td></tr>
+      <tr><td>Negative book value</td><td>Equity is negative, so Graham is undefined and ROE is distorted.</td><td>Use ROIC instead of ROE; ignore Graham.</td><td>Graham, ROE</td><td>Heavy buyback or debt-funded companies</td></tr>
+    </table>
+
+    <h3 id="t-marker">Earnings Marker</h3>
+
+    <img src="images/marker_tooltip.png" alt="Chart with a hovered earnings marker showing the ΔEarningsIQ Snapshot tooltip, with all eight on-chart labels printed under an earlier earnings bar">
+    <p class="img-caption">Hovering a marker opens the quarter's snapshot. The green labels at left are the optional on-chart labels, all eight switched on.</p>
+
+    <p>Every earnings bar gets a triangle. Direction and colour come from that quarter's Quality Score:</p>
+    <table class="ref-table">
+      <tr><th>Marker</th><th>Score</th><th>Meaning</th></tr>
+      <tr><td>▲ bright green</td><td>8–10</td><td>Strong quarter</td></tr>
+      <tr><td>▲ green</td><td>6–7</td><td>Solid quarter</td></tr>
+      <tr><td>▲ orange</td><td>4–5</td><td>Mixed quarter</td></tr>
+      <tr><td>▼ red</td><td>0–3</td><td>Weak quarter</td></tr>
+    </table>
+    <p>Bullish markers sit below the bar pointing up; bearish markers sit above the bar pointing down. Hover for a complete snapshot: Quality Score, Piotroski, EPS and Sales metrics with actual and estimate values, ROE, ROIC, all five valuation prices and the close.</p>
+
+    <h3 id="t-labels">On-chart labels</h3>
+    <p>Eight optional labels (EPS YoY, QoQ, Surprise; Sales YoY, QoQ, Surprise; ROE; ROIC) print under the earnings bar, stacked downward in a fixed order, coloured with the same rules as the table. All are off by default; turn on only the few you care about, since they add up quickly on a busy chart.</p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s4" class="fade-in">
+    <div class="section-header"><span class="section-num">04</span><h2>Valuation Models</h2></div>
+
+    <p class="lede">Five lenses on "what is it worth?". They use different assumptions on purpose: when several agree, that tells you more than any single number.</p>
+
+    <h3>PE Projection</h3>
+    <p><strong>Idea:</strong> if the company delivers the earnings the market expects and investors keep paying the multiple they pay now, where would the price be?</p>
+    <ul>
+      <li><code>Forward EPS = Close ÷ Forward PE</code> (the earnings the market is pricing in)</li>
+      <li><code>Trailing PE = Close ÷ TTM EPS</code></li>
+      <li><code>PE Proj = Forward EPS × Trailing PE</code></li>
+    </ul>
+    <p>When trailing PE is distorted, the stock's own historical trailing PE from profitable quarters is used instead. There are two outcomes. If trailing PE has <em>spiked</em> far above the stock's history, the result is treated as a normal normalised estimate. If it is persistently very high, or there are too few profitable quarters to judge, the same substitution is used but every value is marked <code>*</code> as <strong>low confidence</strong>. The warning banner says which applies. Best for steady earners; treat it as rough for cyclicals near a trough and for companies that have only just turned profitable.</p>
+
+    <h3>Graham Number</h3>
+    <p><strong>Idea:</strong> the most a conservative, fundamentals-first investor should pay.</p>
+    <p><code>√(22.5 × EPS × Book Value per Share)</code>, where 22.5 is Benjamin Graham's ceiling of 15× earnings times 1.5× book. The value is supplied by TradingView and shown as <code>N/A</code> for negative EPS or negative book value. Poorly suited to high-growth or loss-making companies; best used as a conservative floor check.</p>
+
+    <h3>PEG Fair Value</h3>
+    <p><strong>Idea:</strong> is the price justified by growth speed? A PEG of 1 means you pay a PE equal to the growth rate.</p>
+    <p><code>Fair Value = EPS (TTM) × Growth Rate (in %)</code>. For example, EPS of $4.00 and growth of 15 gives $60. Requires positive EPS and positive growth; otherwise <code>N/A</code>. Best for consistent growers, weak for slow or cyclical businesses.</p>
+
+    <h3>Phil Town Sticker Price</h3>
+    <p><strong>Idea:</strong> project the business forward, then discount back to find what you can pay today and still earn your required return.</p>
+    <ol>
+      <li><strong>Future EPS</strong> = EPS × (1 + growth)<sup>years</sup></li>
+      <li><strong>Future PE</strong> = the lower of 2 × growth rate and the stock's historical average trailing PE (never below 5)</li>
+      <li><strong>Future Price</strong> = Future EPS × Future PE</li>
+      <li><strong>Sticker</strong> = Future Price ÷ (1 + MARR)<sup>years</sup></li>
+    </ol>
+    <p>Defaults are 10 years and a 15% minimum acceptable return (MARR). Because each stock's own history caps the future PE, two companies with the same growth rate get different stickers.</p>
+
+    <h3>MOS Price</h3>
+    <p><code>MOS Price = Phil Town Sticker × (1 − MOS%)</code>. At the default 50% it is your maximum buy price with a buffer in case the estimates are wrong: the business could be worth half your estimate and you would still break even.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">Phil Town's Big 5 comes first</div>
+        <p>Rule #1 investing asks that ROIC, revenue, EPS, book value and free cash flow have each grown above 10% a year for ten years before the Sticker Price is trusted. ΔEarningsIQ's ROIC and ROE columns give a partial view; use TradingView's Screener to check the rest.</p>
+      </div>
+    </div>
+
+    <h3>Choosing between models</h3>
+    <table class="ref-table wide">
+      <tr><th>Model</th><th>Best for</th><th>Weak for</th><th>Needs</th><th>Tilt</th></tr>
+      <tr><td>PE Proj</td><td>Steady earners</td><td>Cyclical troughs</td><td>Forward PE, positive-ish EPS</td><td>Market-implied</td></tr>
+      <tr><td>Graham</td><td>Mature, asset-backed businesses</td><td>Growth, loss-makers, buyback-heavy</td><td>Positive EPS and book value</td><td>Conservative</td></tr>
+      <tr><td>PEG</td><td>Consistent growers</td><td>Slow or cyclical</td><td>Positive EPS and growth</td><td>Growth-sensitive</td></tr>
+      <tr><td>Phil Town</td><td>Durable compounders</td><td>Unpredictable earnings</td><td>Positive EPS and growth</td><td>Very growth-sensitive</td></tr>
+      <tr><td>MOS</td><td>Setting a disciplined entry</td><td>—</td><td>A valid Phil Town value</td><td>Strictest</td></tr>
+    </table>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s5" class="fade-in">
+    <div class="section-header"><span class="section-num">05</span><h2>Settings Reference</h2></div>
+
+    <p class="lede">Settings appear in the indicator's Inputs tab in the groups below.</p>
+
+    <div class="input-group">
+      <div class="input-group-header">📊 Main Table — Display Options</div>
+      <div class="input-row"><div class="input-name">Show EPS &amp; Sales Table</div><div class="input-default">On</div><div class="input-desc">Master switch for the Main Table. Turning it off removes the table entirely.</div></div>
+      <div class="input-row"><div class="input-name">Short Table Header</div><div class="input-default">Off</div><div class="input-desc">Abbreviated column headers (for example <code>EPS Y%</code>). <strong>Use it when</strong> the table is too wide for your chart.</div></div>
+      <div class="input-row"><div class="input-name">Main Table Position</div><div class="input-default">Top Right</div><div class="input-desc">Any of nine screen positions.</div></div>
+      <div class="input-row"><div class="input-name">Main Table Text Size</div><div class="input-default">Normal</div><div class="input-desc">Tiny, Small, Normal, Large or Huge.</div></div>
+      <div class="input-row"><div class="input-name">Past Earnings Rows to Display</div><div class="input-default">8</div><div class="input-desc">1–8 rows shown in both tables. The growth-rate and historical-PE inputs are unaffected. <strong>Use it when</strong> you want a compact view of the latest quarters only.</div></div>
+      <div class="input-row"><div class="input-name">Show Future Estimate Row</div><div class="input-default">On</div><div class="input-desc">Adds the next unreported period to both tables. Appears only when an analyst estimate exists.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🧱 Main Table — Column Visibility</div>
+      <div class="input-row"><div class="input-name">Show EPS YoY / QoQ / Surprise %</div><div class="input-default">On</div><div class="input-desc">Three separate toggles for the EPS growth and surprise columns.</div></div>
+      <div class="input-row"><div class="input-name">Show Sales YoY / QoQ / Surprise %</div><div class="input-default">On</div><div class="input-desc">Three separate toggles for the revenue columns.</div></div>
+      <div class="input-row"><div class="input-name">Show ROE % (FQ)</div><div class="input-default">On</div><div class="input-desc">Return on equity for the fiscal quarter.</div></div>
+      <div class="input-row"><div class="input-name">Show ROIC % (FQ)</div><div class="input-default">On</div><div class="input-desc">Return on invested capital for the fiscal quarter.</div></div>
+      <div class="input-row"><div class="input-name">Show Piotroski F-Score (FQ)</div><div class="input-default">On</div><div class="input-desc">0–9 financial-health score.</div></div>
+      <div class="input-row"><div class="input-name">Show Quality Score</div><div class="input-default">On</div><div class="input-desc">Composite 0–10 score. Hiding columns leaves no gap; the banner rows resize to the visible width.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📍 On-Chart Labels</div>
+      <div class="input-row"><div class="input-name">Show Earnings Marker (▲▼)</div><div class="input-default">On</div><div class="input-desc">Quality-Score-coloured triangle with snapshot tooltip on every earnings bar.</div></div>
+      <div class="input-row"><div class="input-name">EPS YoY / QoQ / Surprise on Chart</div><div class="input-default">Off</div><div class="input-desc">Prints the value under the earnings bar. Three toggles.</div></div>
+      <div class="input-row"><div class="input-name">Sales YoY / QoQ / Surprise on Chart</div><div class="input-default">Off</div><div class="input-desc">Same for revenue. Three toggles.</div></div>
+      <div class="input-row"><div class="input-name">ROE % / ROIC % on Chart</div><div class="input-default">Off</div><div class="input-desc">Capital-efficiency labels, coloured by the table's thresholds.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">💲 Projection Table — Display Options</div>
+      <div class="input-row"><div class="input-name">Show Price Projection Table</div><div class="input-default">On</div><div class="input-desc">Master switch for the projection table.</div></div>
+      <div class="input-row"><div class="input-name">Projection Table Position</div><div class="input-default">Bottom Right</div><div class="input-desc">Any of nine positions. Keep it away from the Main Table.</div></div>
+      <div class="input-row"><div class="input-name">Projection Table Text Size</div><div class="input-default">Normal</div><div class="input-desc">Tiny to Huge.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🧮 Projection Table — Column Visibility</div>
+      <div class="input-row"><div class="input-name">Show PE-Based Projection</div><div class="input-default">On</div><div class="input-desc">PE Proj column.</div></div>
+      <div class="input-row"><div class="input-name">Show Graham Number</div><div class="input-default">On</div><div class="input-desc">Graham column.</div></div>
+      <div class="input-row"><div class="input-name">Show PEG Fair Value</div><div class="input-default">On</div><div class="input-desc">PEG column.</div></div>
+      <div class="input-row"><div class="input-name">Show Phil Town Sticker</div><div class="input-default">On</div><div class="input-desc">PhilTown column. The Close and TODAY colours are anchored to this value.</div></div>
+      <div class="input-row"><div class="input-name">Show MOS Price</div><div class="input-default">On</div><div class="input-desc">Margin-of-safety price.</div></div>
+      <div class="input-row"><div class="input-name">Show Close @ Earnings</div><div class="input-default">On</div><div class="input-desc">Closing price on each report date, colour-coded against Sticker and MOS.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">⚙️ Valuation Parameters</div>
+      <div class="input-row"><div class="input-name">Margin of Safety %</div><div class="input-default">50</div><div class="input-desc">0–90. Discount applied to the Sticker Price to get MOS Price; also sets the bright-green threshold. <strong>Use it when</strong> you want a thinner or wider buffer than Phil Town's standard 50%.</div></div>
+      <div class="input-row"><div class="input-name">Min. Acceptable Return % (MARR)</div><div class="input-default">15</div><div class="input-desc">1–50. The annual return you require; Phil Town discounts at this rate. Higher means a lower, more conservative Sticker.</div></div>
+      <div class="input-row"><div class="input-name">Phil Town Projection Years</div><div class="input-default">10</div><div class="input-desc">1–20. How far EPS is projected. Longer horizons magnify growth-rate assumptions.</div></div>
+      <div class="input-row"><div class="input-name">Growth Rate Override % (0 = Auto)</div><div class="input-default">0</div><div class="input-desc">0–200. Leave at 0 for the automatic rate; any positive value replaces it in PEG and Phil Town. <strong>Use it when</strong> you have a view the history does not capture, such as a business that is about to change pace. A warning banner shows while it is active.</div></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s6" class="fade-in">
+    <div class="section-header"><span class="section-num">06</span><h2>Alerts</h2></div>
+
+    <p class="lede">The indicator cannot run in the Pine Screener, so alerts are the way to be told when a company's numbers cross a line you care about.</p>
+
+    <h3>Preset alerts</h3>
+    <p>Click the alarm-clock icon, choose ΔEarningsIQ as the condition and pick one of the named conditions below. "Latest" always means the most recent completed earnings period and updates automatically when a new quarter is reported.</p>
+    <table class="ref-table">
+      <tr><th>Condition</th><th>Fires when</th><th>Reads as</th></tr>
+      <tr><td>EPS Accelerating — YoY and QoQ Both Positive</td><td>Latest EPS YoY &gt; 0 and EPS QoQ &gt; 0</td><td>Earnings momentum building</td></tr>
+      <tr><td>Revenue Accelerating — YoY and QoQ Both Positive</td><td>Latest Sales YoY &gt; 0 and Sales QoQ &gt; 0</td><td>Revenue momentum building</td></tr>
+      <tr><td>Strong Quarter — EPS and Revenue Both Accelerating with Beats</td><td>EPS YoY &gt; 25%, Sales YoY &gt; 20%, and both EPS and revenue beat estimates</td><td>Everything firing at once</td></tr>
+      <tr><td>ROE/ROIC Divergence — Leverage Inflation Detected</td><td>ROE exceeds ROIC by more than 10 points</td><td>Leverage or buybacks inflating ROE; rely on ROIC</td></tr>
+    </table>
+
+    <h3>Custom threshold alerts</h3>
+    <p>For anything the presets do not cover, you can alert on a single metric crossing a number you choose. The metrics are hidden series, so they do not appear on the chart; they only appear in the alert dialog's condition list.</p>
+
+    <h4>Available series</h4>
+    <table class="ref-table">
+      <tr><th>Series name in the dropdown</th><th>What it holds</th><th>Units</th></tr>
+      <tr><td>EPS YoY % Latest</td><td>EPS growth vs same quarter last year</td><td>% (25 = 25%)</td></tr>
+      <tr><td>EPS QoQ % Latest</td><td>EPS growth vs previous quarter</td><td>%</td></tr>
+      <tr><td>EPS Surprise % Latest</td><td>Actual vs estimate, EPS</td><td>%</td></tr>
+      <tr><td>Sales YoY % Latest</td><td>Revenue growth vs same quarter last year</td><td>%</td></tr>
+      <tr><td>Sales QoQ % Latest</td><td>Revenue growth vs previous quarter</td><td>%</td></tr>
+      <tr><td>Sales Surprise % Latest</td><td>Actual vs estimate, revenue</td><td>%</td></tr>
+      <tr><td>ROE % Latest</td><td>Return on equity</td><td>%</td></tr>
+      <tr><td>ROIC % Latest</td><td>Return on invested capital</td><td>%</td></tr>
+      <tr><td>F-Score</td><td>Piotroski score</td><td>0–9</td></tr>
+      <tr><td>Score</td><td>Quality Score</td><td>0–10</td></tr>
+    </table>
+
+    <h4>Step by step</h4>
+    <ol>
+      <li>Make sure ΔEarningsIQ is on the chart of the symbol you want to watch.</li>
+      <li>Click the alarm-clock icon (or right-click the chart) and choose <em>Create Alert</em>.</li>
+      <li>In <em>Condition</em>, pick <strong>ΔEarningsIQ</strong> itself. The second dropdown then lists the series above <em>and</em> the four named presets; choose one of the series, not a preset.</li>
+      <li>Choose an operator. <strong>Crossing Up / Crossing Down</strong> is usually what you want (see below).</li>
+      <li>Set the right-hand side to <em>Value</em> and type your threshold, such as <code>30</code>.</li>
+      <li>Set the trigger frequency and notification, then create the alert.</li>
+    </ol>
+
+    <h4>Examples</h4>
+    <table class="ref-table wide">
+      <tr><th>Goal</th><th>Series</th><th>Operator</th><th>Value</th><th>Fires</th></tr>
+      <tr><td>EPS growth turns strong</td><td>EPS YoY % Latest</td><td>Crossing Up</td><td>25</td><td>When a new report lifts EPS YoY above 25%</td></tr>
+      <tr><td>Earnings miss</td><td>EPS Surprise % Latest</td><td>Crossing Down</td><td>−5</td><td>When a new report misses by more than 5%</td></tr>
+      <tr><td>Quality deteriorates</td><td>Score</td><td>Crossing Down</td><td>5</td><td>When Quality Score drops below 5</td></tr>
+      <tr><td>Health improves</td><td>F-Score</td><td>Crossing Up</td><td>7</td><td>When Piotroski reaches 8 or more</td></tr>
+      <tr><td>Capital efficiency</td><td>ROIC % Latest</td><td>Crossing Up</td><td>15</td><td>When ROIC moves above 15%</td></tr>
+    </table>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">ⓘ</div>
+      <div class="callout-body">
+        <div class="callout-title">Why "Crossing" rather than "Greater Than"</div>
+        <p>These series only change when a company reports, so they sit at one value for weeks. <em>Greater Than</em> is true on every bar until the next report and can notify you repeatedly. <em>Crossing</em> fires once, on the report that moves the value across your threshold.</p>
+      </div>
+    </div>
+
+    <ul>
+      <li>Values are in percentage points, so type <code>25</code> for 25%, not <code>0.25</code>.</li>
+      <li>If a metric is N/A for the symbol, its series is empty and the alert cannot fire.</li>
+      <li>An alert watches one symbol. To monitor many stocks, create the alert on each (the indicator does not work in the Pine Screener).</li>
+      <li>Menu wording differs slightly between TradingView versions and platforms; the idea is always indicator, series, operator, value.</li>
+    </ul>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Pick a trigger frequency</div>
+        <p>"Latest" values do not change between reports, so a condition that is true stays true for weeks. Choose a trigger setting such as <em>Only Once</em> so you are not notified repeatedly for the same quarter.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s7" class="fade-in">
+    <div class="section-header"><span class="section-num">07</span><h2>Worked Examples</h2></div>
+
+    <p class="lede">All examples use real screenshots: Micron (MU), CrowdStrike (CRWD) and McDonald's (MCD). They show how to read the dashboard and are not recommendations.</p>
+
+    <div class="jumpmenu">
+      <div class="jumpmenu-label">Jump to example</div>
+      <a class="jump-link" href="#ex1">1 · Reading one quarter</a>
+      <a class="jump-link" href="#ex2">2 · TODAY row</a>
+      <a class="jump-link" href="#ex3">3 · Low-confidence PE (CRWD)</a>
+      <a class="jump-link" href="#ex4">4 · Tuning inputs (MU)</a>
+      <a class="jump-link" href="#ex5">5 · Negative book value (MCD)</a>
+    </div>
+
+    <h3 id="ex1">Example 1 — Reading a single quarter (MU, 26 SEP row)</h3>
+    <p>From the Main Table: EPS YoY <strong>1002.97</strong>, EPS QoQ <strong>33.09</strong>, EPS Surprise <strong>5.19</strong>, Sales YoY <strong>379.27</strong>, Sales QoQ <strong>30.81</strong>, Sales Surprise <strong>5.64</strong>, ROE <strong>88.26</strong>, ROIC <strong>80.18</strong>, F-Score <strong>8/9</strong>, Score <strong>8/10</strong>.</p>
+    <ol>
+      <li><strong>Momentum.</strong> EPS growth of 1,002.97% year over year is enormous, partly because the year-ago base was small. It is <em>not</em> bold: the row above showed 1214.66, so growth is still huge but cooling. Sales YoY <em>is</em> bold (379.27 vs 345.72), so revenue growth is still accelerating.</li>
+      <li><strong>Beats.</strong> Hover the marker: EPS came in at 33.42 against an estimate of 31.77 (a 5.19% beat) and revenue at 54.229B against 51.334B (5.64%).</li>
+      <li><strong>Efficiency.</strong> ROE 88.26% and ROIC 80.18% are both bright green and bold, meaning improving. The gap is about 8 points, under the 10-point threshold, so no divergence warning.</li>
+      <li><strong>Health and verdict.</strong> Piotroski is 8/9. The Quality Score is 8/10, down from 10/10 in the two previous quarters as growth rates cooled, which is why the marker is a bright-green ▲ (8–10) and not an outright 10.</li>
+    </ol>
+    <p>A strong quarter, though one where the pace of growth has started to ease. Whether that matters depends on the price, which is Example 2.</p>
+
+    <h3 id="ex2">Example 2 — Reading the TODAY row (MU, close $1,029.00)</h3>
+    <p>The TODAY row shows each fair value, with the gap from the current price underneath:</p>
+    <table class="ref-table">
+      <tr><th>Model</th><th>Fair value</th><th>Gap</th><th>Colour</th><th>Why</th></tr>
+      <tr><td>PE Proj</td><td>$1,099.73</td><td>−6.43%</td><td>Light green</td><td>Price is below the value, but not below half of it</td></tr>
+      <tr><td>Graham</td><td>$297.77</td><td>+245.57%</td><td>Red</td><td>Price is far above the value</td></tr>
+      <tr><td>PEG</td><td>$1,855.30</td><td>−44.54%</td><td>Light green</td><td>Below the value, above the value minus 50%</td></tr>
+      <tr><td>PhilTown</td><td>$3,857.30</td><td>−73.32%</td><td>Bright green</td><td>Price is below half the Sticker</td></tr>
+      <tr><td>MOS</td><td>$1,928.65</td><td>−46.65%</td><td>Light green</td><td>Below the MOS price, but not by another 50%</td></tr>
+    </table>
+    <p>The models disagree sharply. Graham is red because it depends on book value, which is typically small relative to earnings for a company with an ROE near 88%, so it tends to be a weak yardstick here. The Phil Town figures lean on the orange banner's message: growth was auto-capped at 25%, then compounded for 10 years. Micron is also a cyclical company, which is where Phil Town and PEG are weakest. PE Proj, which only assumes the market's expectations and the current multiple hold, puts the price within about 6% of fair value.</p>
+    <p>That spread, rather than any single cell, is the information. It shows the valuation hinges on the growth assumption, so test that assumption next (Example 4).</p>
+
+    <h3 id="ex3">Example 3 — Low-confidence PE Proj on a barely profitable company (CRWD)</h3>
+
+    <img src="images/crwd_low_confidence.png" alt="CrowdStrike (CRWD) with the orange low-confidence warning banner, PE Proj values prefixed with an asterisk, N/A cells for PEG, PhilTown and MOS, and a Graham value of $2.00 in the TODAY row">
+    <p class="img-caption">CRWD: the Projection Table (top right) flags PE Proj as low confidence with a <code>*</code>; the Main Table (bottom right) shows four reported quarters.</p>
+
+    <p>CrowdStrike has only just turned profitable, so its earnings are tiny compared with its price. Several things show on screen at once:</p>
+    <ol>
+      <li><strong>The banner and the asterisks.</strong> <em>PE Proj: low confidence (*) — limited profitable history</em> means trailing PE is very high and there are too few profitable quarters to tell a spike from the norm. The historical multiple is used instead and every PE Proj value carries a <code>*</code>. The $347.10 in the TODAY row (−20.76% against the $275.04 close) is a rough estimate, not a precise one.</li>
+      <li><strong>Growth N/A.</strong> The header reads <code>Growth: N/A</code>, and PEG, PhilTown and MOS are all <code>N/A</code>. There is no usable growth rate because the earnings base over the last four quarters is near zero or negative. Hover any N/A cell for the stated reason.</li>
+      <li><strong>Graham is meaningless here.</strong> The $2.00 value, and the +13,647.67% gap that results, come from tiny EPS multiplied by book value. Ignore it.</li>
+      <li><strong>Health is turning.</strong> ROE and ROIC are negative (grey) until the latest quarter, when they turn marginally positive (0.85% and 0.72%). The Piotroski score climbs from 3/9 to 6/9 over the same four quarters.</li>
+    </ol>
+    <p>With the valuation columns largely placeholders, read the momentum instead. Sales YoY is steady at 22–26% in every row, and the Quality Score is 6/10 for three quarters before easing to 4/10 in the latest (the orange ▲ on the chart). The banner and the asterisks are the script telling you which columns to lean on.</p>
+
+    <h3 id="ex4">Example 4 — Tuning the valuation inputs (MU)</h3>
+    <p>Same Micron chart, before and after changing two inputs in the Valuation Parameters group (highlighted in the screenshots).</p>
+
+    <img src="images/tuning_before.png" alt="Inputs dialog with MARR 15 and Growth Rate Override 0, and the Projection Table showing PhilTown $3,857.30 in the TODAY row">
+    <p class="img-caption"><strong>Before:</strong> MARR 15%, growth override 0 (auto). TODAY row: PEG $1,855.30, PhilTown $3,857.30, MOS $1,928.65.</p>
+
+    <img src="images/tuning_after.png" alt="Inputs dialog with MARR 20 and Growth Rate Override 1, and the Projection Table showing PhilTown $66.20 in the TODAY row with red cells">
+    <p class="img-caption"><strong>After:</strong> MARR 20%, growth override 1%. TODAY row: PEG $74.21, PhilTown $66.20, MOS $33.10, and every cell is now red.</p>
+
+    <ul>
+      <li><strong>What did not move.</strong> PE Proj ($1,099.73) and Graham ($297.77) are identical in both screenshots. They do not use MARR or growth, which is a quick way to tell which models a setting affects.</li>
+      <li><strong>What collapsed.</strong> PEG is just EPS (TTM) × growth, so $1,855.30 at 25% and $74.21 at 1% imply TTM EPS of about $74.21. The Sticker fell far more, from $3,857.30 to $66.20, for two reasons. Future EPS compounds at 1% and not 25%, and Phil Town's future PE is limited to twice the growth rate, here 2, which is then floored at 5. Raising MARR from 15% to 20% shrinks it further by discounting harder.</li>
+      <li><strong>The banners say so.</strong> The Projection Table now warns <em>Manual growth override active (1.00%)</em> and the Main Table header reads <code>Growth: manual override</code>.</li>
+      <li><strong>The colours flip.</strong> All Close cells in the period rows turn red, because the price now sits above every Sticker.</li>
+    </ul>
+    <p>A 1% growth override is deliberately extreme, and two inputs changed at once, so treat it as a demonstration of sensitivity and not a valuation. The practical lesson: the Sticker depends heavily on the growth assumption, so try a realistic range (for example 10%, 15%, 20%) and see where the conclusion changes.</p>
+
+    <h3 id="ex5">Example 5 — Negative book value (MCD)</h3>
+
+    <img src="images/mcd_main_table.png" alt="McDonald's (MCD) Main Table with ROE showing the same 521.40% value in grey on every row, while ROIC varies between about 16.8% and 18.1%">
+    <p class="img-caption">MCD: ROE is grey and shows the same 521.40% on every row; ROIC varies by quarter.</p>
+
+    <p>McDonald's has negative shareholders' equity after years of buybacks and dividends, which distorts everything built on book value:</p>
+    <ul>
+      <li><strong>ROE is grey and meaningless.</strong> Dividing by negative equity gives a number that carries no information. Here the same 521.40% repeats on every row, which is itself a sign not to read it.</li>
+      <li><strong>ROIC is the measure to use.</strong> It stays in a narrow 16.8–18.1% band, consistent with a steady, capital-efficient business.</li>
+      <li><strong>Graham shows N/A</strong> in the Projection Table, because its formula needs positive book value, and the <em>Negative book value</em> warning appears there (§3).</li>
+      <li><strong>Quality Score swings.</strong> It runs between 3/10 and 9/10 from quarter to quarter on small EPS and sales changes, so judge the trend across the EPS and Sales columns rather than a single score.</li>
+    </ul>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s8" class="fade-in">
+    <div class="section-header"><span class="section-num">08</span><h2>FAQ &amp; Troubleshooting</h2></div>
+
+    <h3>The tables say "No earnings data available".</h3>
+    <p>The symbol has no reported quarterly earnings in TradingView. This is expected for ETFs, indices and crypto (§1).</p>
+
+    <h3>ROIC, ROE or Piotroski shows N/A.</h3>
+    <p>These come directly from TradingView and are not available for every symbol or period, notably financial companies and some smaller non-US stocks. The tooltip says when data is missing. The other columns are unaffected.</p>
+
+    <h3>Why is ROE grey?</h3>
+    <p>Either ROE is negative or book value is negative. With negative equity ROE is mathematically distorted, so it is greyed out and ROIC is the better measure.</p>
+
+    <h3>What does the * in front of a PE Proj value mean?</h3>
+    <p>It marks a low-confidence estimate. Trailing PE is very high and either in line with the stock's own history or based on too few profitable quarters, so the historical PE was used instead. Hover the cell to see which case applies, and see Example 3.</p>
+
+    <h3>Graham, PEG or Phil Town shows N/A.</h3>
+    <p>Graham needs positive EPS and book value. PEG and Phil Town need positive EPS and a positive growth rate. Hover the cell for the specific reason.</p>
+
+    <h3>What is the difference between Piotroski and Quality Score?</h3>
+    <p>Piotroski (0–9) measures financial <em>health</em> from balance-sheet and operating signals. Quality Score (0–10) measures earnings and revenue <em>momentum</em> and capital efficiency. A company can score well on one and poorly on the other, so read them together.</p>
+
+    <h3>The marker's score differs slightly from the table's.</h3>
+    <p>The marker is computed on the earnings bar itself, while the table is computed once on the latest bar using the full history. The valuation component of the score can therefore differ by a point in some cases. Treat them as the same verdict, not a bug.</p>
+
+    <h3>Why do old rows use today's growth rate?</h3>
+    <p>PEG and Phil Town use one current growth rate and historical-PE average for every row; only EPS and price are period-specific. Rows show what today's assumptions would have produced on each quarter's inputs, not what an investor at the time would have computed.</p>
+
+    <h3>The future row equals the TODAY row for some models.</h3>
+    <p>Yes. For PE Proj and Graham the future row uses current inputs, since no better forward data exists. See §3.</p>
+
+    <h3>The T-Rating changes when I change timeframe.</h3>
+    <p>It is TradingView's technical rating for the chart's current timeframe and is meant to match the Technicals panel.</p>
+
+    <h3>The tables overlap or hide my chart.</h3>
+    <p>Move them to opposite corners, shrink the text size, enable short headers, hide columns or reduce the number of rows (§5).</p>
+
+    <h3>How do I get alerted when a metric passes a specific number?</h3>
+    <p>Use a custom threshold alert on the metric's series. The steps are in §6.</p>
+
+    <h3>Is a high Quality Score a buy signal?</h3>
+    <p>No. It describes the quarter that just reported. Price, valuation and your own research still decide whether it is a good purchase.</p>
+
+    <p class="note-muted"><em>More questions will be added here as they come up.</em></p>
+  </section>
+
+  <!-- ══════════════ CUSTOMIZE: FOOTER / DISCLAIMER ══════════════ -->
+  <div class="disclaimer">ΔEarningsIQ is provided for informational and educational purposes only and is not financial advice. Fair-value models rely on assumptions and third-party data that may be incomplete or wrong. Always do your own research.<br><br>For personal use only. Do not redistribute, resell, or publicly repost this document.</div>
+  <!-- ══════════════ /CUSTOMIZE: FOOTER / DISCLAIMER ══════════════ -->
+
+</main>
+
+<!-- watermark overlay div — populated by JS at load time, see CUSTOMIZE: WATERMARK below -->
+<div class="watermark-overlay" id="watermarkOverlay"></div>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lb-overlay" id="lbOverlay" onclick="lbClose(event)">
+  <div class="lb-esc">ESC to close · scroll to zoom · drag to pan</div>
+  <div class="lb-zoom-controls" onclick="event.stopPropagation()">
+    <div class="lb-zoom-btn" onclick="lbZoomBy(-0.25)">−</div>
+    <div class="lb-zoom-pct" id="lbZoomPct">100%</div>
+    <div class="lb-zoom-btn" onclick="lbZoomBy(0.25)">+</div>
+    <div class="lb-zoom-btn" onclick="lbZoomReset()" title="Reset to fit">⤢</div>
+  </div>
+  <div class="lb-close" onclick="document.getElementById('lbOverlay').classList.remove('open');document.body.style.overflow='';">✕</div>
+  <div class="lb-img-wrap" id="lbImgWrap" onclick="event.stopPropagation()">
+    <img id="lbImg" src="" alt="">
+  </div>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+/* ══════════════ CUSTOMIZE: WATERMARK ══════════════
+   Edit these two strings — no encoding/regeneration needed, the SVG tile is
+   built from them automatically at page load. */
+const WATERMARK_LINE_1 = "ΔEarningsIQ";
+const WATERMARK_LINE_2 = "PERSONAL USE ONLY · DO NOT REDISTRIBUTE";
+const WATERMARK_COLOR  = "#38bdf8";   // usually matches --accent
+/* ══════════════ /CUSTOMIZE: WATERMARK ══════════════ */
+
+(function buildWatermark() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="560" height="300">
+<defs>
+<pattern id="wm" patternUnits="userSpaceOnUse" width="560" height="300" patternTransform="rotate(-25)">
+<text x="15" y="55" font-family="Space Grotesk, sans-serif" font-size="30" font-weight="700" fill="${WATERMARK_COLOR}" fill-opacity="0.09">${WATERMARK_LINE_1}</text>
+<text x="15" y="82" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="1" fill="${WATERMARK_COLOR}" fill-opacity="0.075">${WATERMARK_LINE_2}</text>
+<text x="295" y="205" font-family="Space Grotesk, sans-serif" font-size="30" font-weight="700" fill="${WATERMARK_COLOR}" fill-opacity="0.09">${WATERMARK_LINE_1}</text>
+<text x="295" y="232" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="1" fill="${WATERMARK_COLOR}" fill-opacity="0.075">${WATERMARK_LINE_2}</text>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#wm)"/>
+</svg>`;
+  const dataUri = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  document.getElementById('watermarkOverlay').style.backgroundImage = `url('${dataUri}')`;
+})();
+
+// ── Sidebar active link (scroll-spy)
+const navSections = Array.from(document.querySelectorAll('section[id]'));
+let navClickOverride = null;
+function updateActiveNav() {
+  if (navClickOverride) return;
+  const triggerLine = 120;
+  let current = navSections[0];
+  for (const sec of navSections) {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= triggerLine) { current = sec; } else { break; }
+  }
+  document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+  const a = document.querySelector(`nav a[href="#${current.id}"]`);
+  if (a) a.classList.add('active');
+}
+let navTicking = false;
+window.addEventListener('scroll', () => {
+  if (!navTicking) {
+    requestAnimationFrame(() => { updateActiveNav(); navTicking = false; });
+    navTicking = true;
+  }
+}, {passive: true});
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (navClickOverride) clearTimeout(navClickOverride);
+    navClickOverride = setTimeout(() => { navClickOverride = null; updateActiveNav(); }, 1200);
+  });
+});
+updateActiveNav();
+
+// ── Fade in on scroll
+const fadeObserver = new IntersectionObserver(e => {
+  e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); });
+}, {threshold: .06});
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+// ── Lightbox with pan/zoom
+let lbScale = 1, lbFitScale = 1, lbNatW = 0, lbNatH = 0;
+let lbDragging = false, lbDragStartX = 0, lbDragStartY = 0, lbScrollStartX = 0, lbScrollStartY = 0;
+const LB_PAD_X = 44, LB_PAD_Y = 64;
+
+function lbRender() {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  const w = Math.round(lbNatW * lbScale);
+  const h = Math.round(lbNatH * lbScale);
+  lbImg.style.width = w + 'px';
+  lbImg.style.height = h + 'px';
+  document.getElementById('lbZoomPct').textContent = Math.round(lbScale * 100) + '%';
+  const padX = Math.max(LB_PAD_X, (wrap.clientWidth - w) / 2);
+  const padY = Math.max(LB_PAD_Y, (wrap.clientHeight - h) / 2);
+  wrap.style.padding = padY + 'px ' + padX + 'px';
+  const overflowing = (w + LB_PAD_X * 2) > wrap.clientWidth || (h + LB_PAD_Y * 2) > wrap.clientHeight;
+  wrap.classList.toggle('zoomed', overflowing);
+}
+
+function lbOpen(src, caption) {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  lbImg.src = src;
+  lbImg.onload = () => {
+    lbNatW = lbImg.naturalWidth;
+    lbNatH = lbImg.naturalHeight;
+    const availW = wrap.clientWidth - LB_PAD_X * 2, availH = wrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+    lbScale = lbFitScale;
+    lbRender();
+    wrap.scrollLeft = 0; wrap.scrollTop = 0;
+  };
+  document.getElementById('lbCaption').textContent = caption || '';
+  document.getElementById('lbOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbClose(e) {
+  if (e && e.target !== document.getElementById('lbOverlay')) return;
+  document.getElementById('lbOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbZoomBy(delta) {
+  const wrap = document.getElementById('lbImgWrap');
+  const cx = wrap.clientWidth / 2 + wrap.scrollLeft, cy = wrap.clientHeight / 2 + wrap.scrollTop;
+  lbZoomAt(delta, cx, cy);
+}
+function lbZoomAt(delta, pointerX, pointerY) {
+  const wrap = document.getElementById('lbImgWrap');
+  const oldScale = lbScale;
+  const oldW = lbNatW * oldScale, oldH = lbNatH * oldScale;
+  const ratioX = oldW > 0 ? pointerX / oldW : 0.5;
+  const ratioY = oldH > 0 ? pointerY / oldH : 0.5;
+  let newScale = oldScale + delta * oldScale;
+  newScale = Math.max(lbFitScale * 0.4, Math.min(newScale, 6));
+  lbScale = newScale;
+  lbRender();
+  const newW = lbNatW * newScale, newH = lbNatH * newScale;
+  wrap.scrollLeft = Math.max(0, ratioX * newW - wrap.clientWidth / 2);
+  wrap.scrollTop = Math.max(0, ratioY * newH - wrap.clientHeight / 2);
+}
+function lbZoomReset() {
+  lbScale = lbFitScale;
+  lbRender();
+  const wrap = document.getElementById('lbImgWrap');
+  wrap.scrollLeft = 0; wrap.scrollTop = 0;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('lbOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  if (document.getElementById('lbOverlay').classList.contains('open')) {
+    if (e.key === '+' || e.key === '=') lbZoomBy(0.25);
+    if (e.key === '-' || e.key === '_') lbZoomBy(-0.25);
+    if (e.key === '0') lbZoomReset();
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('main img:not(#lbImg)').forEach(img => {
+    img.classList.add('zoomable');
+    const wrap = document.createElement('div');
+    wrap.className = 'zoomable-wrap';
+    img.parentNode.insertBefore(wrap, img);
+    wrap.appendChild(img);
+    const caption = img.alt || '';
+    img.loading = 'lazy';                                        // keeps long guides fast; file itself is never downscaled
+    const fullSrc = img.getAttribute('data-full') || img.getAttribute('src');   // lightbox always loads the full-res file
+    img.addEventListener('click', () => lbOpen(fullSrc, caption));
+  });
+
+  const lbWrap = document.getElementById('lbImgWrap');
+
+  lbWrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    lbZoomAt(e.deltaY < 0 ? 0.2 : -0.2, pointerX, pointerY);
+  }, {passive: false});
+
+  lbWrap.addEventListener('mousedown', e => {
+    if (e.target.closest('.lb-zoom-controls, .lb-close')) return;
+    lbDragging = true;
+    lbWrap.classList.add('grabbing');
+    lbDragStartX = e.clientX; lbDragStartY = e.clientY;
+    lbScrollStartX = lbWrap.scrollLeft; lbScrollStartY = lbWrap.scrollTop;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!lbDragging) return;
+    lbWrap.scrollLeft = lbScrollStartX - (e.clientX - lbDragStartX);
+    lbWrap.scrollTop = lbScrollStartY - (e.clientY - lbDragStartY);
+  });
+  window.addEventListener('mouseup', () => { lbDragging = false; lbWrap.classList.remove('grabbing'); });
+
+  lbWrap.addEventListener('dblclick', e => {
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    if (Math.abs(lbScale - lbFitScale) < 0.02) {
+      lbZoomAt(1 - lbScale, pointerX, pointerY);
+    } else {
+      lbZoomReset();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+    const availW = lbWrap.clientWidth - LB_PAD_X * 2, availH = lbWrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+  });
+});
+
+// ── COPY DETERRENT (mild — stops casual copy-paste only; view-source, disabling
+//    JS, or dev tools bypass all of it. Delete this block to remove entirely.)
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && ['c','a','x','s','p','u'].includes(k)) e.preventDefault();
+  if (k === 'f12') e.preventDefault();
+  if (mod && e.shiftKey && ['i','j','c'].includes(k)) e.preventDefault();
+});
+</script>
+
+</body>
+</html>
