@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ΔSeasonality Pro — Monthly Seasonality Indicator · User Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════ CUSTOMIZE: COLORS ══════════════ */
+:root {
+  --bg:#080c10; --bg2:#0e1520; --bg3:#141f2e; --bg4:#1a2840;
+  --border:#1c2e42; --border2:#243650;
+  --accent:#38bdf8; --accent2:#fb923c; --accent3:#34d399;   /* decorative brand colors — change per product */
+  --amber:#f59e0b; --red:#ef4444; --green:#22c55e; --purple:#a78bfa; /* semantic — leave as-is unless meaning differs */
+  --text:#dde8f5; --muted:#4a6a88; --label:#7a9ab8;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Syne',sans-serif;
+  --body:'Inter',sans-serif;
+}
+/* ══════════════ /CUSTOMIZE: COLORS ══════════════ */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.75;overflow-x:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* ── NAV ── */
+nav{position:fixed;left:0;top:0;bottom:0;width:248px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;overflow-y:auto;z-index:100;isolation:isolate}
+.nav-logo{padding:0 22px 24px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.nav-logo-tag{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px}
+.nav-logo-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.nav-logo-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.nav-section-label{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:14px 22px 5px}
+nav a{display:block;padding:8px 22px;color:var(--label);text-decoration:none;font-size:14px;transition:all .15s;border-left:2px solid transparent;line-height:1.4}
+nav a:hover{color:var(--accent);border-left-color:var(--accent);background:rgba(56,189,248,.04)}
+nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(56,189,248,.07)}
+nav a .nav-num{font-family:var(--mono);font-size:13px;color:var(--muted);display:block;margin-bottom:1px}
+nav a.nav-pending{opacity:.5}
+nav a.nav-pending .nav-num::after{content:' ○';color:var(--amber)}
+
+/* ── MAIN ── */
+main{margin-left:248px;padding:0 64px 100px;max-width:1120px;position:relative;z-index:1}
+
+/* ── HERO ── */
+.hero{padding:76px 0 60px;border-bottom:1px solid var(--border);margin-bottom:68px}
+.hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--accent),transparent);opacity:.3}
+.hero h1{font-family:var(--sans);font-size:56px;font-weight:800;line-height:1.0;color:var(--text);margin-bottom:22px;letter-spacing:-.02em}
+.hero h1 .accent-mark{color:var(--accent)}
+.hero h1 .sub{display:block;font-size:20px;font-weight:400;color:var(--label);margin-top:10px;letter-spacing:0}
+.hero-desc{font-size:17px;color:var(--label);max-width:640px;line-height:1.7;font-weight:300;margin-bottom:30px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:13px;padding:5px 13px;border-radius:4px;letter-spacing:.04em}
+.badge-1{background:rgba(56,189,248,.1);color:var(--accent);border:1px solid rgba(56,189,248,.22)}
+.badge-2{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+.badge-3{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.badge-4{background:rgba(52,211,153,.1);color:var(--accent3);border:1px solid rgba(52,211,153,.22)}
+
+/* ── SECTIONS ── */
+section{margin-bottom:80px;scroll-margin-top:28px}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--accent);opacity:.7;min-width:30px}
+h2{font-family:var(--sans);font-size:28px;font-weight:700;color:var(--text)}
+h3{font-family:var(--sans);font-size:18px;font-weight:600;color:var(--accent2);margin:28px 0 12px;letter-spacing:.01em}
+h4{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--text);margin:18px 0 8px}
+p{color:var(--label);margin-bottom:14px;line-height:1.8;max-width:760px}
+p.lede{font-size:17.5px;max-width:720px}
+ul,ol{margin:0 0 16px 22px;max-width:740px;color:var(--label)}
+li{margin-bottom:7px;line-height:1.7}
+strong{color:var(--text);font-weight:500}
+
+/* ── TABLES ── */
+.ref-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;max-width:900px}
+.ref-table th{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--border)}
+.ref-table td{padding:12px 16px;border-bottom:1px solid rgba(28,46,66,.5);color:var(--label);vertical-align:top;line-height:1.65}
+.ref-table tr:hover td{background:rgba(56,189,248,.025)}
+.ref-table td:first-child{font-family:var(--mono);font-size:13px;color:var(--accent2);white-space:nowrap}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:6px;padding:16px 20px;margin:20px 0;border-left:3px solid;display:flex;gap:14px;align-items:flex-start;max-width:760px}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.callout-body{flex:1}
+.callout-title{font-family:var(--sans);font-size:15px;font-weight:600;margin-bottom:5px}
+.callout p{font-size:14.5px;margin:0;line-height:1.68}
+.callout-cyan{background:rgba(56,189,248,.06);border-color:var(--accent)}
+.callout-cyan .callout-title{color:var(--accent)}
+.callout-green{background:rgba(34,197,94,.06);border-color:var(--green)}
+.callout-green .callout-title{color:var(--green)}
+.callout-amber{background:rgba(245,158,11,.07);border-color:var(--amber)}
+.callout-amber .callout-title{color:var(--amber)}
+.callout-red{background:rgba(239,68,68,.06);border-color:var(--red)}
+.callout-red .callout-title{color:var(--red)}
+.callout-purple{background:rgba(167,139,250,.06);border-color:var(--purple)}
+.callout-purple .callout-title{color:var(--purple)}
+
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);color:var(--accent2);padding:2px 8px;border-radius:3px;border:1px solid var(--border)}
+
+/* ── INPUT / SETTINGS REFERENCE GROUPS ── */
+.input-group{background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin:18px 0;overflow:hidden;max-width:900px}
+.input-group-header{background:var(--bg3);padding:10px 18px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.input-row{display:grid;grid-template-columns:220px 110px 1fr;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(28,46,66,.35);align-items:start}
+.input-row:last-child{border-bottom:none}
+.input-name{font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.5}
+.input-default{font-family:var(--mono);font-size:12px;color:var(--amber);padding:2px 8px;background:rgba(245,158,11,.08);border-radius:3px;border:1px solid rgba(245,158,11,.18);white-space:nowrap;display:inline-block}
+.input-desc{font-size:14px;color:var(--label);line-height:1.68}
+
+/* ── SCREENSHOT PLACEHOLDER (use while real screenshots aren't ready yet) ── */
+.ss-placeholder{background:var(--bg2);border:2px dashed var(--border2);border-radius:8px;padding:40px 30px;text-align:center;margin:24px 0;position:relative;max-width:800px}
+.ss-placeholder-label{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.ss-placeholder-title{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ss-placeholder-desc{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:480px;margin:0 auto 12px}
+.ss-placeholder-dim{font-family:var(--mono);font-size:12px;color:var(--border2);margin-top:10px}
+
+/* ── IN-SECTION JUMP MENU (for sections with several examples/sub-items) ── */
+.jumpmenu{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;max-width:900px}
+.jumpmenu-label{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;width:100%;margin-bottom:2px}
+.jump-link{font-family:var(--mono);font-size:13px;color:var(--label);text-decoration:none;padding:6px 12px;border:1px solid var(--border2);border-radius:4px;background:var(--bg3);transition:all .15s}
+.jump-link:hover{color:var(--accent);border-color:var(--accent);background:rgba(56,189,248,.08)}
+
+/* ── PENDING / TODO BOX (visible in-progress marker while drafting) ── */
+.pending-box{background:var(--bg2);border:1.5px dashed var(--border2);border-radius:6px;padding:20px 22px;max-width:760px;margin:10px 0 24px}
+.pending-tag{font-family:var(--mono);font-size:11.5px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.pending-box p{color:var(--label);font-size:14.5px;margin-bottom:8px}
+.pending-box ul{margin:6px 0 0 18px}
+.pending-box li{font-size:14px;color:var(--label)}
+
+/* ── LIGHTBOX (pan + scroll-wheel zoom) ── */
+.lb-overlay{display:none;position:fixed;top:0;left:248px;right:0;bottom:0;background:rgba(0,0,0,.93);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lb-overlay.open{display:flex}
+.lb-img-wrap{position:relative;width:100%;height:100%;box-sizing:border-box;overflow:auto;cursor:zoom-in}
+.lb-img-wrap.zoomed{cursor:grab}
+.lb-img-wrap.zoomed.grabbing{cursor:grabbing}
+.lb-overlay img{display:block;border-radius:6px;box-shadow:0 24px 80px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08);cursor:inherit;user-select:none}
+.lb-close{position:absolute;top:14px;right:18px;width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--label);transition:all .15s;z-index:100000;line-height:1}
+.lb-close:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-caption{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.4);letter-spacing:.08em;pointer-events:none;z-index:100000}
+.lb-esc{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.28);letter-spacing:.1em;pointer-events:none;z-index:100000}
+.lb-zoom-controls{position:absolute;top:14px;left:18px;display:flex;gap:6px;z-index:100000}
+.lb-zoom-btn{width:38px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:16px;color:var(--label);transition:all .15s;user-select:none}
+.lb-zoom-btn:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.lb-zoom-pct{min-width:52px;height:38px;background:rgba(20,31,45,.95);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;color:var(--label);padding:0 8px}
+.zoomable{cursor:zoom-in;transition:opacity .15s;display:block;max-width:100%;height:auto}
+.zoomable:hover{opacity:.88}
+.zoomable-wrap{position:relative;margin:24px 0;max-width:800px}
+.zoomable-wrap::after{content:'🔍 Click to zoom';position:absolute;bottom:10px;right:12px;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.6);padding:5px 11px;border-radius:4px;pointer-events:none;letter-spacing:.06em;transition:opacity .2s}
+
+/* ── FADE IN ── */
+.fade-in{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ── DISCLAIMER / FOOTER NOTE ── */
+.disclaimer{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;font-size:12.5px;color:var(--muted);margin-top:60px;text-align:center;line-height:1.7;max-width:900px}
+
+/* ── WATERMARK (tiled diagonally across every section) ── */
+.watermark-overlay{position:fixed;inset:0;z-index:40;pointer-events:none;background-repeat:repeat}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ CUSTOMIZE: NAV ══════════════ -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-tag">User Guide</div>
+    <div class="nav-logo-title">ΔSeasonality Pro</div>
+    <div class="nav-logo-sub">TradingView Indicator</div>
+  </div>
+
+  <div class="nav-section-label">Foundation</div>
+  <a href="#s1"><span class="nav-num">01</span>What is ΔSeasonality Pro?</a>
+  <a href="#s2"><span class="nav-num">02</span>Core Concept — Seasonality &amp; Fit</a>
+
+  <div class="nav-section-label">Reference</div>
+  <a href="#s3"><span class="nav-num">03</span>Dashboard / Feature Tour</a>
+  <a href="#s4"><span class="nav-num">04</span>Settings Reference</a>
+
+  <div class="nav-section-label">Practical Guide</div>
+  <a href="#s5"><span class="nav-num">05</span>Worked Examples</a>
+  <a href="#s6"><span class="nav-num">06</span>Limitations &amp; Known Behavior</a>
+
+  <div class="nav-section-label">Support</div>
+  <a href="#s7"><span class="nav-num">07</span>FAQ &amp; Troubleshooting</a>
+</nav>
+<!-- ══════════════ /CUSTOMIZE: NAV ══════════════ -->
+
+<main>
+
+  <!-- ══════════════ CUSTOMIZE: HERO ══════════════ -->
+  <div class="hero">
+    <div class="hero-eyebrow">TradingView Overlay Indicator</div>
+    <h1><span class="accent-mark">Δ</span>Seasonality Pro<span class="sub">Monthly &amp; weekly seasonality analytics for any symbol, right on your chart</span></h1>
+    <p class="hero-desc">ΔSeasonality Pro replays a symbol's price history to show you how it has typically behaved in each calendar month — average return, win rate, and a week-by-week breakdown — then scores how closely the last 12 months actually followed that historical pattern. A forward projection and a past-year trajectory overlay let you see the seasonal pattern directly on the price chart, not just in a table.</p>
+    <div class="hero-badges">
+      <span class="badge badge-1">TradingView Indicator</span>
+      <span class="badge badge-2">Overlay · Daily Timeframe</span>
+      <span class="badge badge-3">20-Year Lookback</span>
+      <span class="badge badge-4">Seasonal Fit Score</span>
+    </div>
+  </div>
+  <!-- ══════════════ /CUSTOMIZE: HERO ══════════════ -->
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: plain section with paragraphs and a callout -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s1" class="fade-in">
+    <div class="section-header"><span class="section-num">01</span><h2>What is ΔSeasonality Pro?</h2></div>
+
+    <p class="lede">ΔSeasonality Pro is a TradingView indicator that turns a symbol's own price history into a calendar of seasonal tendencies — no external data, no manual backtesting.</p>
+    <p>Add it to any <strong>daily</strong> chart and it walks back through up to <strong>20 years</strong> of bars, calculating the average return and win rate for every calendar month (Jan–Dec), plus a week-by-week breakdown within each month. The results are drawn directly on the chart as a summary table, an optional bar-chart histogram, a past-year "seasonal trajectory" overlay, and a forward price projection for the next 1–12 weeks — all built from the same underlying seasonal averages.</p>
+    <p>On top of the raw averages, ΔSeasonality Pro computes a <strong>Seasonal Fit</strong> score: a correlation between the symbol's actual returns over the last 12 months and what its historical seasonal pattern predicted for those same months. This tells you, at a glance, whether the symbol is currently "in season" or trading against its usual rhythm.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Not financial advice</div>
+        <p>Seasonality is a historical tendency, not a forecast guarantee. Past seasonal patterns can weaken, reverse, or fail to repeat. Every table, bar chart, and projection in this indicator carries a "Not financial advice" disclaimer for this reason — treat it as one input among many, not a signal to trade on alone.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: reference table -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s2" class="fade-in">
+    <div class="section-header"><span class="section-num">02</span><h2>Core Concept — Seasonality &amp; Seasonal Fit</h2></div>
+
+    <p class="lede">Everything the indicator shows comes from two calculations: a monthly/weekly seasonal average, and a Seasonal Fit correlation.</p>
+
+    <h3>How the seasonal average is built</h3>
+    <p>On every month boundary, the indicator records the return from the previous month's close to the current month's close, and files it under that calendar month (Jan–Dec) and — separately — under the trading week within that month (weeks 1–5, based on a trading-week counter rather than fixed calendar-day buckets). Only months within the <code>Lookback period in Years</code> window are counted. Averaging these across every year in the lookback window produces each month's <strong>Avg Return %</strong> and <strong>Win Rate %</strong> (the percentage of years that month closed positive).</p>
+
+    <h3>How Seasonal Fit is scored</h3>
+    <p>Seasonal Fit answers a different question: is the symbol behaving seasonally <em>right now</em>? It compares the actual monthly return for each of the last 12 months against a historical baseline for that same calendar month — built only from years <em>older</em> than those last 12 months, so the score is never compared against itself. The result is a Pearson correlation coefficient (r) between −1 and +1.</p>
+
+    <table class="ref-table">
+      <tr><th>Range</th><th>Label</th><th>Meaning</th></tr>
+      <tr><td>r ≥ 0.30</td><td>Strong</td><td>Recent moves closely tracked the historical seasonal rhythm for those months.</td></tr>
+      <tr><td>−0.30 &lt; r &lt; 0.30</td><td>Weak</td><td>Little relationship — recent price action looks largely unrelated to the seasonal pattern.</td></tr>
+      <tr><td>r ≤ −0.30</td><td>Anti-Seasonal</td><td>Price moved opposite to the seasonal pattern — something else is likely overriding it right now.</td></tr>
+    </table>
+
+    <p>A minimum of 6 of the last 12 months must have a usable historical baseline before Seasonal Fit will show a score; until then it reads <strong>N/A</strong>.</p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: image with automatic pan/zoom lightbox -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s3" class="fade-in">
+    <div class="section-header"><span class="section-num">03</span><h2>Dashboard / Feature Tour</h2></div>
+
+    <p class="lede">ΔSeasonality Pro draws up to four elements on your chart: the seasonality table, an optional bar-chart histogram, a past-year trajectory line, and a forward projection. Each is independently toggleable.</p>
+
+    <h3>Overview</h3>
+    <p>Here's all four elements together on a daily AMZN chart — the table (top right), the bar-chart panel (bottom right), and the orange trajectory/projection line running through the candles.</p>
+    <img src="images/dashboard-overview.png" alt="Full ΔSeasonality Pro dashboard on an AMZN daily chart with the December weekly-breakdown tooltip open, showing table, bar chart, and trajectory/projection line together">
+
+    <div class="jumpmenu">
+      <div class="jumpmenu-label">Jump to component</div>
+      <a class="jump-link" href="#f-table">1 · Seasonality Table</a>
+      <a class="jump-link" href="#f-bars">2 · Bar Chart</a>
+      <a class="jump-link" href="#f-trajectory">3 · Seasonal Trajectory</a>
+      <a class="jump-link" href="#f-projection">4 · Forward Projection</a>
+      <a class="jump-link" href="#f-screener">5 · Pine Screener</a>
+    </div>
+
+    <h3 id="f-table">1 · Seasonality Table</h3>
+    <p>A grid panel (default: top-right corner) with one row per calendar month, plus a header banner. The header shows the Seasonal Fit score. Each month row is colored pale green or pale red by average return sign, with the single best month highlighted in stronger green and the single worst month in stronger red, both marked with a ★. Hover any month row for a tooltip breaking that month down week by week. An optional 5th column renders a tiny sparkline (one Unicode block character per week) showing the shape of returns within the month at a glance.</p>
+    <img src="images/seasonality-table.png" alt="Seasonality table showing all 12 months, Seasonal Fit: Strong (r=0.71), and starred best/worst months">
+
+    <h3 id="f-bars">2 · Bar Chart</h3>
+    <p>An optional StockCharts-style histogram (default: bottom-right corner) with one column per month. Bar height is driven by whichever metric you pick under <code>Bar Height Metric</code> — Avg Return % normalizes height against the largest-magnitude monthly average across all 12 months, or Win Rate % fills 0–100% of the bar height. Whichever metric isn't driving height is still shown as a label — the win rate at the top of the filled portion, the average return at the bottom. Best and worst months get the same stronger green/red treatment as the table, and the header row repeats the Seasonal Fit badge alongside a scale label explaining what a full-height bar represents.</p>
+    <img src="images/bar-chart.png" alt="Bar chart histogram with one column per month, April tallest in dark green as the best month, February in red as the worst month">
+
+    <h3 id="f-trajectory">3 · Seasonal Trajectory (Past 1Y)</h3>
+    <p>A line plotted directly on the price chart, anchored to the closing price roughly 12 months ago and then walked forward week by week using each week's historical average return for that calendar month/week slot. It's shifted vertically by <code>Vertical Plot Shift in %</code> so it doesn't sit directly on top of price, making it easy to compare the seasonal "expected" path (orange) against what price (candles) actually did over the same 12 months.</p>
+    <img src="images/seasonal-trajectory.png" alt="Orange Seasonal Trajectory line running above the price candles over the past year, offset vertically for visibility">
+
+    <h3 id="f-projection">4 · Forward Weekly Projection</h3>
+    <p>Dashed orange line segments extending up to 12 weeks into the future from the last close, compounding each week's historical average return for that future calendar month/week. Because future weeks have no trading-week bar history yet, the week-of-month bucket for projection is estimated from the calendar day instead of the trading-week counter the table uses — see <a href="#s6">§06 Limitations</a> for what that means in practice.</p>
+    <img src="images/forward-projection.png" alt="Dashed orange forward projection segments extending past the last candle, stepping week to week">
+
+    <h3 id="f-screener">5 · Using It in the Pine Screener</h3>
+    <p>Every monthly Avg Return % and Win Rate % value is also published as a hidden screener-safe plot, so you can filter and rank an entire watchlist by seasonality without opening each chart. In TradingView's Pine Screener, add the indicator, then add columns for the month(s) you care about — e.g. <code>Oct_AvgReturn</code>, <code>Nov_WinRate</code>, <code>Dec_WinRate</code> — and set filters like <code>&gt; 0</code> or <code>&gt; 50</code> to surface symbols with strong seasonal tendencies heading into that stretch of the calendar. The screener also exposes the <code>Seasonal Trajectory (Weekly Avg, Past 1Y)</code> column so you can sort by how closely a symbol has been tracking its seasonal path recently.</p>
+    <img src="images/pine-screener.png" alt="Pine Screener with ΔSeasonality (for last N Y...) columns added for Oct/Nov/Dec Avg Return and Win Rate, filtered and sorted to surface symbols with strong seasonal returns">
+    <p>Remember the caveat from <a href="#s6">§06 Limitations</a>: the Screener only sees roughly the last 2 years of daily bars per symbol, so these columns reflect a shorter window than your chart's <code>Lookback period in Years</code> setting, and Seasonal Fit is intentionally left out of the screener-safe plots for the same reason.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">Δ</div>
+      <div class="callout-body">
+        <div class="callout-title">Non-daily charts</div>
+        <p>The seasonality table, bar chart, trajectory, and projection all depend on daily-bar logic. On any non-daily timeframe, ΔSeasonality Pro instead shows a small warning panel reading "Seasonal indicator works only on DAILY chart" and skips the rest of its output.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: settings-reference input groups -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s4" class="fade-in">
+    <div class="section-header"><span class="section-num">04</span><h2>Settings Reference</h2></div>
+
+    <p class="lede">Settings are grouped exactly as they appear in the indicator's own settings panel on TradingView.</p>
+
+    <div class="input-group">
+      <div class="input-group-header">General</div>
+      <div class="input-row"><div class="input-name">Lookback period in Years</div><div class="input-default">20</div><div class="input-desc">How many years of monthly closes feed the seasonal averages. Range 1–20. <strong>Note:</strong> TradingView's Pine Screener only evaluates roughly the last 500 bars per symbol (~2 years of daily data) regardless of this setting — a high lookback value only fully applies on the live chart.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🗓️ Seasonality Table Details</div>
+      <div class="input-row"><div class="input-name">Show Seasonality Table</div><div class="input-default">On</div><div class="input-desc">Toggles the entire 12-month table panel.</div></div>
+      <div class="input-row"><div class="input-name">Short Table Headers</div><div class="input-default">On</div><div class="input-desc">Uses abbreviated column headers (AvgR%, WinR%, Yrs) instead of full labels (Avg Return %, Win Rate %, Years) to save horizontal space.</div></div>
+      <div class="input-row"><div class="input-name">Show Weekly Bars Column</div><div class="input-default">On</div><div class="input-desc">Adds a 5th table column with a mini bar-chart sparkline — one character per week, height = that week's average return. Hover a row for exact weekly values.</div></div>
+      <div class="input-row"><div class="input-name">Table Position</div><div class="input-default">Top Right</div><div class="input-desc">Any of the 9 standard chart-corner/edge positions. If this matches the Bar Chart Position below, the table's title banner shows a ⚠ conflict warning since Pine draws overlapping panels on top of one another.</div></div>
+      <div class="input-row"><div class="input-name">Text Size</div><div class="input-default">Normal</div><div class="input-desc">Tiny / Small / Normal / Large — applies to the header and data cells (the title banner keeps its own larger size).</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📊 Seasonality Bar Chart</div>
+      <div class="input-row"><div class="input-name">Show Bar Chart</div><div class="input-default">On</div><div class="input-desc">Toggles the 12-column histogram panel. The panel is only created while this is on, so it never overlaps another panel when hidden.</div></div>
+      <div class="input-row"><div class="input-name">Bar Chart Position</div><div class="input-default">Bottom Right</div><div class="input-desc">Same 9-position options as the table. Also triggers the ⚠ conflict warning if it matches Table Position.</div></div>
+      <div class="input-row"><div class="input-name">Text Size</div><div class="input-default">Tiny</div><div class="input-desc">Font size for the win-rate/avg-return labels and month names inside the bars. Defaults smaller than the table since the 12-column grid is denser.</div></div>
+      <div class="input-row"><div class="input-name">Bar Height Metric</div><div class="input-default">Avg Return %</div><div class="input-desc">Avg Return % normalizes bar height against the largest-magnitude average monthly return across all 12 months. Win Rate % instead fills each bar 0–100%. Whichever metric you don't pick is still shown as a label inside the bar.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">🕰️ Past Seasonal Performance for 1 Year using Weekly Avg Returns</div>
+      <div class="input-row"><div class="input-name">Show Seasonal Trajectory (Past 1Y)</div><div class="input-default">On</div><div class="input-desc">Toggles the on-chart trajectory line built from historical weekly averages, anchored ~12 months back.</div></div>
+      <div class="input-row"><div class="input-name">Seasonal Trajectory Color</div><div class="input-default">Orange</div><div class="input-desc">Line color for the trajectory plot.</div></div>
+      <div class="input-row"><div class="input-name">Vertical Plot Shift in %</div><div class="input-default">5</div><div class="input-desc">Shifts the trajectory line up by this percentage of its anchor price, purely for visual separation from the candles — it does not change the shape of the line.</div></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-header">📈 Price Projection using Weekly Avg Returns</div>
+      <div class="input-row"><div class="input-name">Projection Weeks (max 12)</div><div class="input-default">12</div><div class="input-desc">How many weeks of dashed forward projection to draw from the last close, each week compounding that calendar month/week's historical average return. Range 1–12; only drawn on daily charts.</div></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: in-page jump menu for a multi-example section -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s5" class="fade-in">
+    <div class="section-header"><span class="section-num">05</span><h2>Worked Examples</h2></div>
+
+    <p class="lede">One chart, read start to finish — everything you need is on this single AMZN dashboard.</p>
+
+    <img src="images/seasonality-table.png" alt="AMZN seasonality table used for the worked example — Seasonal Fit: Strong (r=0.71), April best month, February worst month">
+
+    <p>Start with the header: <strong>Seasonal Fit: Strong (r=0.71)</strong>. That's above the +0.30 threshold, so AMZN's actual monthly returns over the last 12 months have generally moved in the direction its historical seasonal pattern predicted — the seasonal edge has been showing up recently, not just in distant history, which gives more weight to everything below it.</p>
+
+    <p>Scan the month rows for the stars. <strong>★ Apr</strong> shows <code>AvgR% 7.81</code>, <code>WinR% 71.43</code>, <code>Yrs 21</code> in strong green — the single best-performing month across 21 years of history, closing higher in roughly 5 of every 7 Aprils by an average of +7.81%. <strong>★ Feb</strong> is the mirror image: <code>AvgR% −2.43</code>, <code>WinR% 42.86</code>, in red — the single worst month, closing lower more often than not. Every other month sits in between, colored pale green or pale red by sign alone.</p>
+
+    <p>Hover any row (or the matching column in the bar chart) for the week-by-week tooltip — a strong month can still hide one weak week inside it, which the WeeklyR% sparkline hints at before you even open the tooltip.</p>
+
+    <p>Put together: with Fit already reading Strong, AMZN entering April carries more seasonal conviction than the raw +7.81% average alone would suggest — and the same logic means a Weak or Anti-Seasonal Fit score would call for the opposite adjustment, discounting even a historically strong month.</p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: pending/TODO section marker (also flags itself in the nav via class="nav-pending") -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s6" class="fade-in">
+    <div class="section-header"><span class="section-num">06</span><h2>Limitations &amp; Known Behavior</h2></div>
+
+    <p class="lede">A few behaviors are by design, not bugs — worth knowing before you rely on the numbers.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Pine Screener sees far less history</div>
+        <p>TradingView's Pine Screener only evaluates roughly the last 500 bars per symbol (~2 years of daily data), no matter what <code>Lookback period in Years</code> is set to. The screener-safe monthly Avg Return / Win Rate columns will reflect that shorter window, not your full lookback setting.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Seasonal Fit isn't exposed to the Screener</div>
+        <p>Seasonal Fit is intentionally left out of the Screener-safe plots. Once 12 months are set aside for the comparison window, a ~2-year Screener history leaves the "historical average" for a given month as a single prior year's value rather than a genuine multi-year average — the correlation wouldn't be meaningfully different from noise in that context. Seasonal Fit remains fully functional on the live chart and bar chart, where your full lookback history is used.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-icon">Δ</div>
+      <div class="callout-body">
+        <div class="callout-title">Forward projection uses a slightly different week bucket</div>
+        <p>Past weekly averages are bucketed using a trading-week counter (weeks actually observed on the chart). Future projection weeks have no bar history yet, so they're bucketed by calendar day-of-month instead. The two methods usually agree but can diverge on some weeks — this is a documented approximation, not a data error.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-red">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <div class="callout-title">Daily charts only</div>
+        <p>The table, bar chart, trajectory, and projection all require daily bars. On any other timeframe you'll see a warning panel instead of the dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- EXAMPLE: FAQ pattern -->
+  <!-- ═══════════════════════════════════════ -->
+  <section id="s7" class="fade-in">
+    <div class="section-header"><span class="section-num">07</span><h2>FAQ &amp; Troubleshooting</h2></div>
+
+    <h3>Why does my chart just show a red warning box instead of the table?</h3>
+    <p>You're on a non-daily timeframe. Switch to a daily chart — see <a href="#s6">§06</a>.</p>
+
+    <h3>Why do the table and bar chart overlap each other?</h3>
+    <p><code>Table Position</code> and <code>Bar Chart Position</code> are set to the same corner. Pine doesn't auto-offset overlapping panels, so one will sit on top of the other. The title banner of each panel shows a ⚠ warning when this happens — move one of them to a different corner in settings.</p>
+
+    <h3>Why does Seasonal Fit say "N/A"?</h3>
+    <p>Seasonal Fit needs at least 6 of the last 12 calendar months to have a usable historical baseline (built from years older than those 12 months). On a newly-listed symbol or a short lookback setting, that threshold may not be met yet.</p>
+
+    <h3>A symbol passed my Pine Screener filter (e.g. <code>Oct_AvgReturn &gt; 0</code>), but the chart shows a negative Oct AvgR%. Why?</h3>
+    <p>This is the Screener's ~2-year history limit from <a href="#s6">§06</a> in practice. The screener column and the chart table are both genuinely correct — they're just computed from different amounts of history. The Screener only evaluates roughly the last 500 bars per symbol, so its <code>Oct_AvgReturn</code> might reflect just 1–2 recent Octobers. The chart table uses your full <code>Lookback period in Years</code> setting (up to 20), so a positive recent October can sit inside a longer run of negative ones, flipping the sign once more years are included. Treat Screener results as a first-pass filter to shortlist symbols, then confirm on the actual chart with your intended lookback before acting on them.</p>
+
+    <h3>What does the ★ next to a month mean?</h3>
+    <p>It marks the single best-performing month (highest average return) or single worst-performing month (lowest average return) across your lookback window — shown in stronger green or stronger red in both the table and the bar chart.</p>
+
+    <h3>Why don't my past trajectory and forward projection line up perfectly at the "today" point?</h3>
+    <p>They're built from slightly different week-bucketing methods — see <a href="#s6">§06</a> for why.</p>
+  </section>
+
+  <!-- ══════════════ CUSTOMIZE: FOOTER / DISCLAIMER ══════════════ -->
+  <div class="disclaimer">ΔSeasonality Pro is a technical/historical analysis tool. Seasonal averages and Seasonal Fit scores describe past behavior only and are not a prediction of future performance. Not financial advice.<br><br>For personal use only. Do not redistribute, resell, or publicly repost this document.</div>
+  <!-- ══════════════ /CUSTOMIZE: FOOTER / DISCLAIMER ══════════════ -->
+
+</main>
+
+<!-- watermark overlay div — populated by JS at load time, see CUSTOMIZE: WATERMARK below -->
+<div class="watermark-overlay" id="watermarkOverlay"></div>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lb-overlay" id="lbOverlay" onclick="lbClose(event)">
+  <div class="lb-esc">ESC to close · scroll to zoom · drag to pan</div>
+  <div class="lb-zoom-controls" onclick="event.stopPropagation()">
+    <div class="lb-zoom-btn" onclick="lbZoomBy(-0.25)">−</div>
+    <div class="lb-zoom-pct" id="lbZoomPct">100%</div>
+    <div class="lb-zoom-btn" onclick="lbZoomBy(0.25)">+</div>
+    <div class="lb-zoom-btn" onclick="lbZoomReset()" title="Reset to fit">⤢</div>
+  </div>
+  <div class="lb-close" onclick="document.getElementById('lbOverlay').classList.remove('open');document.body.style.overflow='';">✕</div>
+  <div class="lb-img-wrap" id="lbImgWrap" onclick="event.stopPropagation()">
+    <img id="lbImg" src="" alt="">
+  </div>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+/* ══════════════ CUSTOMIZE: WATERMARK ══════════════
+   Edit these two strings — no encoding/regeneration needed, the SVG tile is
+   built from them automatically at page load. */
+const WATERMARK_LINE_1 = "ΔSEASONALITY PRO";
+const WATERMARK_LINE_2 = "PERSONAL USE ONLY · DO NOT REDISTRIBUTE";
+const WATERMARK_COLOR  = "#38bdf8";   // usually matches --accent
+/* ══════════════ /CUSTOMIZE: WATERMARK ══════════════ */
+
+(function buildWatermark() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="560" height="300">
+<defs>
+<pattern id="wm" patternUnits="userSpaceOnUse" width="560" height="300" patternTransform="rotate(-25)">
+<text x="15" y="55" font-family="Space Grotesk, sans-serif" font-size="30" font-weight="700" fill="${WATERMARK_COLOR}" fill-opacity="0.09">${WATERMARK_LINE_1}</text>
+<text x="15" y="82" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="1" fill="${WATERMARK_COLOR}" fill-opacity="0.075">${WATERMARK_LINE_2}</text>
+<text x="295" y="205" font-family="Space Grotesk, sans-serif" font-size="30" font-weight="700" fill="${WATERMARK_COLOR}" fill-opacity="0.09">${WATERMARK_LINE_1}</text>
+<text x="295" y="232" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="1" fill="${WATERMARK_COLOR}" fill-opacity="0.075">${WATERMARK_LINE_2}</text>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#wm)"/>
+</svg>`;
+  const dataUri = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  document.getElementById('watermarkOverlay').style.backgroundImage = `url('${dataUri}')`;
+})();
+
+// ── Sidebar active link (scroll-spy)
+const navSections = Array.from(document.querySelectorAll('section[id]'));
+let navClickOverride = null;
+function updateActiveNav() {
+  if (navClickOverride) return;
+  const triggerLine = 120;
+  let current = navSections[0];
+  for (const sec of navSections) {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= triggerLine) { current = sec; } else { break; }
+  }
+  document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+  const a = document.querySelector(`nav a[href="#${current.id}"]`);
+  if (a) a.classList.add('active');
+}
+let navTicking = false;
+window.addEventListener('scroll', () => {
+  if (!navTicking) {
+    requestAnimationFrame(() => { updateActiveNav(); navTicking = false; });
+    navTicking = true;
+  }
+}, {passive: true});
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (navClickOverride) clearTimeout(navClickOverride);
+    navClickOverride = setTimeout(() => { navClickOverride = null; updateActiveNav(); }, 1200);
+  });
+});
+updateActiveNav();
+
+// ── Fade in on scroll
+const fadeObserver = new IntersectionObserver(e => {
+  e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); });
+}, {threshold: .06});
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+// ── Lightbox with pan/zoom
+let lbScale = 1, lbFitScale = 1, lbNatW = 0, lbNatH = 0;
+let lbDragging = false, lbDragStartX = 0, lbDragStartY = 0, lbScrollStartX = 0, lbScrollStartY = 0;
+const LB_PAD_X = 44, LB_PAD_Y = 64;
+
+function lbRender() {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  const w = Math.round(lbNatW * lbScale);
+  const h = Math.round(lbNatH * lbScale);
+  lbImg.style.width = w + 'px';
+  lbImg.style.height = h + 'px';
+  document.getElementById('lbZoomPct').textContent = Math.round(lbScale * 100) + '%';
+  const padX = Math.max(LB_PAD_X, (wrap.clientWidth - w) / 2);
+  const padY = Math.max(LB_PAD_Y, (wrap.clientHeight - h) / 2);
+  wrap.style.padding = padY + 'px ' + padX + 'px';
+  const overflowing = (w + LB_PAD_X * 2) > wrap.clientWidth || (h + LB_PAD_Y * 2) > wrap.clientHeight;
+  wrap.classList.toggle('zoomed', overflowing);
+}
+
+function lbOpen(src, caption) {
+  const lbImg = document.getElementById('lbImg');
+  const wrap = document.getElementById('lbImgWrap');
+  lbImg.src = src;
+  lbImg.onload = () => {
+    lbNatW = lbImg.naturalWidth;
+    lbNatH = lbImg.naturalHeight;
+    const availW = wrap.clientWidth - LB_PAD_X * 2, availH = wrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+    lbScale = lbFitScale;
+    lbRender();
+    wrap.scrollLeft = 0; wrap.scrollTop = 0;
+  };
+  document.getElementById('lbCaption').textContent = caption || '';
+  document.getElementById('lbOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbClose(e) {
+  if (e && e.target !== document.getElementById('lbOverlay')) return;
+  document.getElementById('lbOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbZoomBy(delta) {
+  const wrap = document.getElementById('lbImgWrap');
+  const cx = wrap.clientWidth / 2 + wrap.scrollLeft, cy = wrap.clientHeight / 2 + wrap.scrollTop;
+  lbZoomAt(delta, cx, cy);
+}
+function lbZoomAt(delta, pointerX, pointerY) {
+  const wrap = document.getElementById('lbImgWrap');
+  const oldScale = lbScale;
+  const oldW = lbNatW * oldScale, oldH = lbNatH * oldScale;
+  const ratioX = oldW > 0 ? pointerX / oldW : 0.5;
+  const ratioY = oldH > 0 ? pointerY / oldH : 0.5;
+  let newScale = oldScale + delta * oldScale;
+  newScale = Math.max(lbFitScale * 0.4, Math.min(newScale, 6));
+  lbScale = newScale;
+  lbRender();
+  const newW = lbNatW * newScale, newH = lbNatH * newScale;
+  wrap.scrollLeft = Math.max(0, ratioX * newW - wrap.clientWidth / 2);
+  wrap.scrollTop = Math.max(0, ratioY * newH - wrap.clientHeight / 2);
+}
+function lbZoomReset() {
+  lbScale = lbFitScale;
+  lbRender();
+  const wrap = document.getElementById('lbImgWrap');
+  wrap.scrollLeft = 0; wrap.scrollTop = 0;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('lbOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  if (document.getElementById('lbOverlay').classList.contains('open')) {
+    if (e.key === '+' || e.key === '=') lbZoomBy(0.25);
+    if (e.key === '-' || e.key === '_') lbZoomBy(-0.25);
+    if (e.key === '0') lbZoomReset();
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('main img:not(#lbImg)').forEach(img => {
+    img.classList.add('zoomable');
+    const wrap = document.createElement('div');
+    wrap.className = 'zoomable-wrap';
+    img.parentNode.insertBefore(wrap, img);
+    wrap.appendChild(img);
+    const caption = img.alt || '';
+    const fullSrc = img.getAttribute('src');
+    img.addEventListener('click', () => lbOpen(fullSrc, caption));
+  });
+
+  const lbWrap = document.getElementById('lbImgWrap');
+
+  lbWrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    lbZoomAt(e.deltaY < 0 ? 0.2 : -0.2, pointerX, pointerY);
+  }, {passive: false});
+
+  lbWrap.addEventListener('mousedown', e => {
+    if (e.target.closest('.lb-zoom-controls, .lb-close')) return;
+    lbDragging = true;
+    lbWrap.classList.add('grabbing');
+    lbDragStartX = e.clientX; lbDragStartY = e.clientY;
+    lbScrollStartX = lbWrap.scrollLeft; lbScrollStartY = lbWrap.scrollTop;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!lbDragging) return;
+    lbWrap.scrollLeft = lbScrollStartX - (e.clientX - lbDragStartX);
+    lbWrap.scrollTop = lbScrollStartY - (e.clientY - lbDragStartY);
+  });
+  window.addEventListener('mouseup', () => { lbDragging = false; lbWrap.classList.remove('grabbing'); });
+
+  lbWrap.addEventListener('dblclick', e => {
+    const rect = lbWrap.getBoundingClientRect();
+    const pointerX = e.clientX - rect.left + lbWrap.scrollLeft;
+    const pointerY = e.clientY - rect.top + lbWrap.scrollTop;
+    if (Math.abs(lbScale - lbFitScale) < 0.02) {
+      lbZoomAt(1 - lbScale, pointerX, pointerY);
+    } else {
+      lbZoomReset();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+    const availW = lbWrap.clientWidth - LB_PAD_X * 2, availH = lbWrap.clientHeight - LB_PAD_Y * 2;
+    lbFitScale = Math.max(0.05, Math.min(availW / lbNatW, availH / lbNatH, 1));
+  });
+});
+
+// ── COPY DETERRENT (mild — stops casual copy-paste only; view-source, disabling
+//    JS, or dev tools bypass all of it. Delete this block to remove entirely.)
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && ['c','a','x','s','p','u'].includes(k)) e.preventDefault();
+  if (k === 'f12') e.preventDefault();
+  if (mod && e.shiftKey && ['i','j','c'].includes(k)) e.preventDefault();
+});
+</script>
+
+</body>
+</html>
